@@ -14,6 +14,7 @@ import com.snicesoft.avlib.AvTools;
 import com.snicesoft.avlib.R;
 import com.snicesoft.avlib.annotation.DataBind;
 import com.snicesoft.avlib.annotation.Id;
+import com.snicesoft.avlib.widget.IAvData;
 
 /**
  * @author zhu zhe
@@ -28,7 +29,7 @@ public class MainActivity extends Activity implements OnItemClickListener {
 
 	ListAdapter adapter;
 
-	class Data {
+	class Data implements IAvData {
 		@DataBind(id = R.id.textView1, pattern = "yyyy-MM-dd HH:mm:ss", prefix = "￥：")
 		String text = "" + System.currentTimeMillis();
 	}

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.snicesoft.avlib.annotation.DataBind;
 import com.snicesoft.avlib.annotation.Id;
 import com.snicesoft.avlib.view.ViewFinder;
+import com.snicesoft.avlib.widget.IAvData;
 import com.snicesoft.avlib.widget.IAvHolder;
 
 /**
@@ -51,7 +52,7 @@ public class AvTools {
 		return (T) av.findViewById(vId);
 	}
 
-	public static void dataBind(Object data, Activity holder) {
+	public static <D extends IAvData> void dataBind(D data, Activity holder) {
 		dataAnyBind(data, holder);
 	}
 
@@ -61,7 +62,8 @@ public class AvTools {
 	 * @param data
 	 * @param holder
 	 */
-	public static <T extends IAvHolder> void dataBind(Object data, T holder) {
+	public static <H extends IAvHolder, D extends IAvData> void dataBind(
+			D data, H holder) {
 		dataAnyBind(data, holder);
 	}
 
@@ -73,7 +75,7 @@ public class AvTools {
 	 * @param v
 	 * @param holder
 	 */
-	public static <T extends IAvHolder> void initHolder(View v, T holder) {
+	public static <H extends IAvHolder> void initHolder(View v, H holder) {
 		initHolder(holder, new ViewFinder(v));
 	}
 
@@ -90,7 +92,7 @@ public class AvTools {
 	 * @param av
 	 * @param holder
 	 */
-	public static <T extends IAvHolder> void initHolder(T holder,
+	public static <H extends IAvHolder> void initHolder(H holder,
 			ViewFinder finder) {
 		initAnyHolder(holder, finder);
 	}
@@ -125,7 +127,7 @@ public class AvTools {
 			}
 	}
 
-	private static void dataAnyBind(Object data, Object holder) {
+	private static <D extends IAvData> void dataAnyBind(D data, Object holder) {
 		Field[] holderFields = holder.getClass().getDeclaredFields();
 		if (holderFields != null && holderFields.length > 0)
 			for (Field field : holderFields) {
@@ -142,6 +144,36 @@ public class AvTools {
 					e.printStackTrace();
 				}
 			}
+	}
+
+	private static <D extends IAvData> ViewValue getViewValue(D data, int vId) {
+		Object value = null;
+		DataBind dataBind = null;
+		if (data == null || vId <= 0)
+			return null;
+		Field[] fields = data.getClass().getDeclaredFields();
+		if (fields != null && fields.length > 0) {
+			for (Field field : fields) {
+				try {
+					field.setAccessible(true);
+					value = field.get(data);
+					dataBind = field.getAnnotation(DataBind.class);
+					if (dataBind != null) {
+						int resId = dataBind.id();
+						if (vId == resId) {
+							break;
+						} else {
+							value = null;
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if (value == null || dataBind == null)
+			return null;
+		return avTools.new ViewValue(value, dataBind);
 	}
 
 	private static void setValue(View view, ViewValue viewValue) {
@@ -180,36 +212,6 @@ public class AvTools {
 		default:
 			break;
 		}
-	}
-
-	private static ViewValue getViewValue(Object data, int vId) {
-		Object value = null;
-		DataBind dataBind = null;
-		if (data == null || vId <= 0)
-			return null;
-		Field[] fields = data.getClass().getDeclaredFields();
-		if (fields != null && fields.length > 0) {
-			for (Field field : fields) {
-				try {
-					field.setAccessible(true);
-					value = field.get(data);
-					dataBind = field.getAnnotation(DataBind.class);
-					if (dataBind != null) {
-						int resId = dataBind.id();
-						if (vId == resId) {
-							break;
-						} else {
-							value = null;
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		if (value == null || dataBind == null)
-			return null;
-		return avTools.new ViewValue(value, dataBind);
 	}
 
 	private class ViewValue {
