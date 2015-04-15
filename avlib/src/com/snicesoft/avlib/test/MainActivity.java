@@ -21,7 +21,7 @@ import com.snicesoft.avlib.test.hd.MainHB.MainHolder;
 public class MainActivity extends AvActivity<MainHolder, MainData> implements
 		OnItemClickListener {
 	private Handler mHandler = new Handler();
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

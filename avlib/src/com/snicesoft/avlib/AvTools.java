@@ -64,7 +64,8 @@ public class AvTools {
 	 * @param data
 	 * @param holder
 	 */
-	public static <H extends IAvHolder, D extends IAvData> void dataBind(D data, H holder) {
+	public static <H extends IAvHolder, D extends IAvData> void dataBind(
+			D data, H holder) {
 		dataAnyBind(data, holder);
 	}
 
@@ -78,6 +79,7 @@ public class AvTools {
 	 * 初始化Activity中的View
 	 * 
 	 * @param av
+	 *            Activity本省就符合Holder的规范
 	 */
 	public static void initHolder(Activity av) {
 		initAnyHolder(av, new ViewFinder(av));
