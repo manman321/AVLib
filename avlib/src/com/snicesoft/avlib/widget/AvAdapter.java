@@ -2,7 +2,6 @@ package com.snicesoft.avlib.widget;
 
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
 import com.snicesoft.avlib.AvTools;
 
@@ -12,7 +11,7 @@ import com.snicesoft.avlib.AvTools;
  * @version V1.0
  */
 public abstract class AvAdapter<H extends IAvHolder, D extends IAvData> extends
-		BaseAdapter {
+		android.widget.BaseAdapter {
 	private int resource;
 
 	public AvAdapter(int resource) {
