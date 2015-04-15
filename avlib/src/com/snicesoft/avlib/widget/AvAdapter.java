@@ -11,7 +11,8 @@ import com.snicesoft.avlib.AvTools;
  * @since 2015年4月15日 上午9:52:57
  * @version V1.0
  */
-public abstract class AvAdapter<T extends IAvHolder> extends BaseAdapter {
+public abstract class AvAdapter<H extends IAvHolder, D extends IAvData> extends
+		BaseAdapter {
 	private int resource;
 
 	public AvAdapter(int resource) {
@@ -19,21 +20,29 @@ public abstract class AvAdapter<T extends IAvHolder> extends BaseAdapter {
 		this.resource = resource;
 	}
 
+	@Override
+	public Object getItem(int position) {
+		return null;
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return 0;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		T holder = null;
+		H holder = null;
 		if (convertView == null) {
 			holder = newHolder();
 			convertView = View.inflate(parent.getContext(), resource, null);
-			// 绑定view到holder
 			AvTools.initHolder(convertView, holder);
 			convertView.setTag(holder);
 		} else {
-			holder = (T) convertView.getTag();
+			holder = (H) convertView.getTag();
 		}
-		Object data = getData(position);
-		// 绑定数据
+		D data = getData(position);
 		if (data != null) {
 			AvTools.dataBind(data, holder);
 			bindAfter(holder, data, position);
@@ -48,14 +57,14 @@ public abstract class AvAdapter<T extends IAvHolder> extends BaseAdapter {
 	 * @param data
 	 * @param position
 	 */
-	public abstract void bindAfter(T holder, Object data, int position);
+	public abstract void bindAfter(H holder, D data, int position);
 
 	/**
 	 * 创建Holder
 	 * 
 	 * @return
 	 */
-	public abstract T newHolder();
+	public abstract H newHolder();
 
 	/**
 	 * 获取数据
@@ -63,5 +72,5 @@ public abstract class AvAdapter<T extends IAvHolder> extends BaseAdapter {
 	 * @param position
 	 * @return
 	 */
-	public abstract Object getData(int position);
+	public abstract D getData(int position);
 }
