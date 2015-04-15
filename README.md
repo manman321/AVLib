@@ -78,4 +78,4 @@ public class MainActivity extends AvActivity<MainHolder, MainData> implements
 ```
 # 关于作者
 * Email： <snicesoft@qq.com>
-* QQ：[14193330]<http://wpa.qq.com/msgrd?v=1&uin=14193330>
+* QQ：[14193330](http://wpa.qq.com/msgrd?v=1&uin=14193330)
