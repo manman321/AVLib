@@ -22,9 +22,16 @@ public abstract class AvActivity<H extends IAvHolder, D extends IAvData>
 
 	public abstract void createHolderAndData();
 
+	public void dataBind() {
+		if (holder == null && data != null)
+			AvTools.dataBind(data, this);
+		if (holder != null && data != null)
+			AvTools.dataBind(data, holder);
+	}
+
 	public abstract void loadContentView();
 
-	public abstract void initHD();
+	public abstract void onAv();
 
 	@Override
 	protected final void onCreate(Bundle savedInstanceState) {
@@ -35,13 +42,6 @@ public abstract class AvActivity<H extends IAvHolder, D extends IAvData>
 			AvTools.initHolder(holder, this);
 		else
 			AvTools.initHolder(this);
-		initHD();
-	}
-
-	public void dataBind() {
-		if (holder == null && data != null)
-			AvTools.dataBind(data, this);
-		if (holder != null && data != null)
-			AvTools.dataBind(data, holder);
+		onAv();
 	}
 }

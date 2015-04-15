@@ -21,12 +21,6 @@ public class MainActivity extends AvActivity<MainHolder, MainData> implements
 	private Handler mHandler = new Handler();
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Toast.makeText(this, "position=" + position, Toast.LENGTH_LONG).show();
-	}
-
-	@Override
 	public void createHolderAndData() {
 		holder = new MainHolder();
 		data = new MainData();
@@ -38,7 +32,7 @@ public class MainActivity extends AvActivity<MainHolder, MainData> implements
 	}
 
 	@Override
-	public void initHD() {
+	public void onAv() {
 		holder.setAdapter(new ListAdapter(R.layout.item_list));
 		holder.listView1.setOnItemClickListener(this);
 		mHandler.postDelayed(new Runnable() {
@@ -49,5 +43,11 @@ public class MainActivity extends AvActivity<MainHolder, MainData> implements
 				dataBind();
 			}
 		}, 3000);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Toast.makeText(this, "position=" + position, Toast.LENGTH_LONG).show();
 	}
 }
