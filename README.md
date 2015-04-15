@@ -15,7 +15,7 @@
 
 ### 示例
 * 1、MainHB：MainActivity的独立Holder和Data
-```
+```java
 public interface MainHB {
 	public class MainHolder implements IAvHolder {
 		@Id(value = R.id.textView1, backgroundColor = Color.RED)
@@ -41,7 +41,7 @@ public interface MainHB {
 }
 ```
 * 2、MainActivity
-```
+```java
 public class MainActivity extends AvActivity<MainHolder, MainData> implements
 		OnItemClickListener {
 	private Handler mHandler = new Handler();
