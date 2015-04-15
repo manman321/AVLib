@@ -1,6 +1,7 @@
 package com.snicesoft.avlib.demo.hd;
 
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.snicesoft.avlib.annotation.DataBind;
@@ -15,7 +16,8 @@ public interface MainHD {
 		public TextView tvText;
 		@Id(R.id.btnTest)
 		public Button btnTest;
-
+		@Id(R.id.lv)
+		public ListView lv;
 	}
 
 	public class MainData implements IAvData {

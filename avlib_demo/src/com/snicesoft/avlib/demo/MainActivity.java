@@ -4,6 +4,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.snicesoft.avlib.base.AvActivity;
+import com.snicesoft.avlib.demo.adapter.LVAdapter;
 import com.snicesoft.avlib.demo.hd.MainHD.MainData;
 import com.snicesoft.avlib.demo.hd.MainHD.MainHolder;
 
@@ -24,6 +25,7 @@ public class MainActivity extends AvActivity<MainHolder, MainData> implements
 	@Override
 	public void onAv() {
 		dataBind();
+		holder.lv.setAdapter(new LVAdapter(R.layout.item_lv));
 	}
 
 	@Override
