@@ -5,9 +5,9 @@
 ##Holder和Data规范
 
 ### Holder组件
-* 1、需要实现IAvHolder接口：比如独立的Activity对应的Holder
-* 2、不需要实现IAvHolder接口：比如Activity直接当做Holder使用
-* 3、Holder中的View需要通过@Id注解绑定view
+> * 1、需要实现IAvHolder接口：比如独立的Activity对应的Holder
+> * 2、不需要实现IAvHolder接口：比如Activity直接当做Holder使用
+> * 3、Holder中的View需要通过@Id注解绑定view
 
 ### Data组件
 * 1、需要实现IAvData接口：比如独立的Activity对应的Data
@@ -76,3 +76,6 @@ public class MainActivity extends AvActivity<MainHolder, MainData> implements
 	}
 }
 ```
+# 关于作者
+* Email： <snicesoft@qq.com>
+* QQ：14193330
