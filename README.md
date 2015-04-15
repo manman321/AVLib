@@ -10,8 +10,8 @@
 > * 3、Holder中的View需要通过@Id注解绑定view
 
 ### Data组件
-* 1、需要实现IAvData接口：比如独立的Activity对应的Data
-* 2、Data中的数据需要通过@DataBind对应Holder的View
+> * 1、需要实现IAvData接口：比如独立的Activity对应的Data
+> * 2、Data中的数据需要通过@DataBind对应Holder的View
 
 ### 示例
 * 1、MainHB：MainActivity的独立Holder和Data
@@ -78,4 +78,4 @@ public class MainActivity extends AvActivity<MainHolder, MainData> implements
 ```
 # 关于作者
 * Email： <snicesoft@qq.com>
-* QQ：14193330
+* QQ：[14193330]<http://wpa.qq.com/msgrd?v=1&uin=14193330>
