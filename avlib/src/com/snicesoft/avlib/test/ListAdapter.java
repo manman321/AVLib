@@ -15,11 +15,9 @@ public class ListAdapter extends AvAdapter<ListViewHolder, Data> {
 
 	public ListAdapter(int resource) {
 		super(resource);
-	}
-
-	@Override
-	public int getCount() {
-		return 20;
+		for (int i = 0; i < 20; i++) {
+			add(new Data(i + 1));
+		}
 	}
 
 	@Override
@@ -32,10 +30,4 @@ public class ListAdapter extends AvAdapter<ListViewHolder, Data> {
 	public ListViewHolder newHolder() {
 		return new ListViewHolder();
 	}
-
-	@Override
-	public Data getData(int position) {
-		return new Data(position);
-	}
-
 }

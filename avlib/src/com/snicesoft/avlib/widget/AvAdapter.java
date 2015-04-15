@@ -1,5 +1,9 @@
 package com.snicesoft.avlib.widget;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,11 +16,44 @@ import com.snicesoft.avlib.AvTools;
  */
 public abstract class AvAdapter<H extends IAvHolder, D extends IAvData> extends
 		android.widget.BaseAdapter {
+	private List<D> dataList = new ArrayList<D>();
+
+	public void setDataList(Collection<D> dataList) {
+		this.dataList.clear();
+		this.dataList.addAll(dataList);
+		notifyDataSetChanged();
+	}
+
+	public void clearData() {
+		this.dataList.clear();
+		notifyDataSetChanged();
+	}
+
+	public void addAll(Collection<D> collection) {
+		this.dataList.addAll(collection);
+		notifyDataSetChanged();
+	}
+
+	public void add(D d) {
+		this.dataList.add(d);
+		notifyDataSetChanged();
+	}
+
+	public void remove(int location) {
+		this.dataList.remove(location);
+		notifyDataSetChanged();
+	}
+
 	private int resource;
 
 	public AvAdapter(int resource) {
 		super();
 		this.resource = resource;
+	}
+
+	@Override
+	public int getCount() {
+		return dataList == null ? 0 : dataList.size();
 	}
 
 	@Override
@@ -71,5 +108,9 @@ public abstract class AvAdapter<H extends IAvHolder, D extends IAvData> extends
 	 * @param position
 	 * @return
 	 */
-	public abstract D getData(int position);
+	public D getData(int position) {
+		if (dataList == null)
+			return null;
+		return dataList.get(position);
+	}
 }
