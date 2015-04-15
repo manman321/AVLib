@@ -22,13 +22,26 @@ public abstract class AvFragmentActivity<H extends IAvHolder, D extends IAvData>
 
 	public abstract void createHolderAndData();
 
+	public abstract void loadContentView();
+
+	public abstract void initHD();
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected final void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		createHolderAndData();
+		loadContentView();
+		if (holder != null)
+			AvTools.initHolder(holder, this);
+		else
+			AvTools.initHolder(this);
+		initHD();
 	}
 
-	public void refreshData() {
-		AvTools.dataBind(data, holder);
+	public void dataBind() {
+		if (holder == null && data != null)
+			AvTools.dataBind(data, this);
+		if (holder != null && data != null)
+			AvTools.dataBind(data, holder);
 	}
 }
