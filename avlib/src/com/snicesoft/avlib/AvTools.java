@@ -52,6 +52,10 @@ public class AvTools {
 		return (T) av.findViewById(vId);
 	}
 
+	public static <D extends IAvData> void dataBind(D data, Activity holder) {
+		dataAnyBind(data, holder);
+	}
+
 	/**
 	 * 数据绑定
 	 * 
