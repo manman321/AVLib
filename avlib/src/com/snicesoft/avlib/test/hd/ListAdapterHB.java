@@ -1,4 +1,4 @@
-package com.snicesoft.avlib.test.data;
+package com.snicesoft.avlib.test.hd;
 
 import android.widget.TextView;
 
@@ -8,7 +8,7 @@ import com.snicesoft.avlib.annotation.Id;
 import com.snicesoft.avlib.widget.IAvData;
 import com.snicesoft.avlib.widget.IAvHolder;
 
-public interface ListHolderAndData {
+public interface ListAdapterHB {
 	public class Data implements IAvData {
 		@DataBind(id = R.id.button1, prefix = "测试——")
 		public String text;

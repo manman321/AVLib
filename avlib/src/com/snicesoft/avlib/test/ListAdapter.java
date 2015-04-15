@@ -2,8 +2,8 @@ package com.snicesoft.avlib.test;
 
 import android.graphics.Color;
 
-import com.snicesoft.avlib.test.data.ListHolderAndData.Data;
-import com.snicesoft.avlib.test.data.ListHolderAndData.ListViewHolder;
+import com.snicesoft.avlib.test.hd.ListAdapterHB.Data;
+import com.snicesoft.avlib.test.hd.ListAdapterHB.ListViewHolder;
 import com.snicesoft.avlib.widget.AvAdapter;
 
 /**

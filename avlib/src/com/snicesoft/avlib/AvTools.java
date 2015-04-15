@@ -52,10 +52,6 @@ public class AvTools {
 		return (T) av.findViewById(vId);
 	}
 
-	public static <D extends IAvData> void dataBind(D data, Activity holder) {
-		dataAnyBind(data, holder);
-	}
-
 	/**
 	 * 数据绑定
 	 * 
@@ -79,6 +75,12 @@ public class AvTools {
 		initHolder(holder, new ViewFinder(v));
 	}
 
+	public static <H extends IAvHolder, D extends IAvData> void initActivity(
+			H holder, D data, Activity av) {
+		AvTools.initHolder(holder, av);
+		AvTools.dataBind(data, holder);
+	}
+
 	/**
 	 * 初始化Activity中的View
 	 * 
@@ -86,6 +88,10 @@ public class AvTools {
 	 */
 	public static void initHolder(Activity av) {
 		initAnyHolder(av, new ViewFinder(av));
+	}
+
+	public static <H extends IAvHolder> void initHolder(H holder, Activity av) {
+		initAnyHolder(holder, new ViewFinder(av));
 	}
 
 	/**
