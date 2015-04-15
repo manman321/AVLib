@@ -123,53 +123,58 @@ public class AvTools {
 			}
 	}
 
+	/**
+	 * 数据绑定到view
+	 * 
+	 * @param data
+	 * @param holder
+	 */
 	private static <D extends IAvData> void dataAnyBind(D data, Object holder) {
-		Field[] holderFields = holder.getClass().getDeclaredFields();
-		if (holderFields != null && holderFields.length > 0)
-			for (Field field : holderFields) {
+		Field[] dataFields = data.getClass().getDeclaredFields();
+		if (dataFields != null && dataFields.length > 0) {
+			for (Field field : dataFields) {
 				try {
 					field.setAccessible(true);
-					Id resource = field.getAnnotation(Id.class);
-					if (resource != null) {
-						Object view = field.get(holder);
-						if (view != null)
-							setValue((View) view,
-									getViewValue(data, resource.value()));
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-	}
-
-	private static <D extends IAvData> ViewValue getViewValue(D data, int vId) {
-		Object value = null;
-		DataBind dataBind = null;
-		if (data == null || vId <= 0)
-			return null;
-		Field[] fields = data.getClass().getDeclaredFields();
-		if (fields != null && fields.length > 0) {
-			for (Field field : fields) {
-				try {
-					field.setAccessible(true);
-					value = field.get(data);
-					dataBind = field.getAnnotation(DataBind.class);
+					Object value = field.get(data);
+					DataBind dataBind = field.getAnnotation(DataBind.class);
 					if (dataBind != null) {
-						int resId = dataBind.id();
-						if (vId == resId) {
-							break;
-						} else {
-							value = null;
-						}
+						int vid = dataBind.id();
+						View view = getView(holder, vid);
+						if (view != null)
+							setValue(view, avTools.new ViewValue(value,
+									dataBind));
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		if (value == null || dataBind == null)
-			return null;
-		return avTools.new ViewValue(value, dataBind);
+	}
+
+	/**
+	 * 通过Id查找Holder的view
+	 * 
+	 * @param holder
+	 * @param vid
+	 * @return
+	 */
+	private static View getView(Object holder, int vid) {
+		View v = null;
+		Field[] holderFields = holder.getClass().getDeclaredFields();
+		if (holderFields != null && holderFields.length > 0)
+			for (Field field : holderFields) {
+				try {
+					field.setAccessible(true);
+					v = (View) field.get(holder);
+					Id resource = field.getAnnotation(Id.class);
+					if (resource != null && resource.value() == vid) {
+						break;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		return v;
 	}
 
 	private static void setValue(View view, ViewValue viewValue) {
