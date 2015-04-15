@@ -7,6 +7,14 @@ import com.snicesoft.avlib.AvTools;
 import com.snicesoft.avlib.widget.IAvData;
 import com.snicesoft.avlib.widget.IAvHolder;
 
+/**
+ * 普通Activity基类
+ * 
+ * @author zhe
+ *
+ * @param <H>
+ * @param <D>
+ */
 public abstract class AvActivity<H extends IAvHolder, D extends IAvData>
 		extends Activity {
 	protected D data;

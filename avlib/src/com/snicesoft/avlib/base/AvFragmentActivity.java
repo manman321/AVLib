@@ -7,6 +7,14 @@ import com.snicesoft.avlib.AvTools;
 import com.snicesoft.avlib.widget.IAvData;
 import com.snicesoft.avlib.widget.IAvHolder;
 
+/**
+ * FragmentActivity基类
+ * 
+ * @author zhe
+ *
+ * @param <H>
+ * @param <D>
+ */
 public abstract class AvFragmentActivity<H extends IAvHolder, D extends IAvData>
 		extends FragmentActivity {
 	protected D data;
