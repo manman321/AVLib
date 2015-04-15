@@ -36,7 +36,7 @@ public abstract class AvAdapter<H extends IAvHolder, D extends IAvData> extends
 		if (convertView == null) {
 			holder = newHolder();
 			convertView = View.inflate(parent.getContext(), resource, null);
-			AvTools.initHolder(convertView, holder);
+			AvTools.initHolder(holder, convertView);
 			convertView.setTag(holder);
 		} else {
 			holder = (H) convertView.getTag();

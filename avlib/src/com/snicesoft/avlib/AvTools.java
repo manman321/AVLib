@@ -24,6 +24,8 @@ import com.snicesoft.avlib.widget.IAvHolder;
  */
 @SuppressLint("SimpleDateFormat")
 public class AvTools {
+	private static AvTools avTools;
+
 	private AvTools() {
 	}
 
@@ -52,8 +54,8 @@ public class AvTools {
 		return (T) av.findViewById(vId);
 	}
 
-	public static <D extends IAvData> void dataBind(D data, Activity holder) {
-		dataAnyBind(data, holder);
+	public static <D extends IAvData> void dataBind(D data, Activity activity) {
+		dataAnyBind(data, activity);
 	}
 
 	/**
@@ -62,26 +64,13 @@ public class AvTools {
 	 * @param data
 	 * @param holder
 	 */
-	public static <H extends IAvHolder, D extends IAvData> void dataBind(
-			D data, H holder) {
+	public static <H extends IAvHolder, D extends IAvData> void dataBind(D data, H holder) {
 		dataAnyBind(data, holder);
 	}
 
-	private static AvTools avTools;
-
-	/**
-	 * 初始化view到Holder
-	 * 
-	 * @param v
-	 * @param holder
-	 */
-	public static <H extends IAvHolder> void initHolder(View v, H holder) {
-		initHolder(holder, new ViewFinder(v));
-	}
-
-	public static <H extends IAvHolder, D extends IAvData> void initActivity(
-			H holder, D data, Activity av) {
-		AvTools.initHolder(holder, av);
+	public static <H extends IAvHolder, D extends IAvData> void initHolderAndData(
+			H holder, D data, Activity activity) {
+		AvTools.initHolder(holder, activity);
 		AvTools.dataBind(data, holder);
 	}
 
@@ -94,17 +83,12 @@ public class AvTools {
 		initAnyHolder(av, new ViewFinder(av));
 	}
 
-	public static <H extends IAvHolder> void initHolder(H holder, Activity av) {
-		initAnyHolder(holder, new ViewFinder(av));
+	public static <H extends IAvHolder> void initHolder(H holder, View view) {
+		initAnyHolder(holder, new ViewFinder(view));
 	}
 
-	/**
-	 * @param av
-	 * @param holder
-	 */
-	public static <H extends IAvHolder> void initHolder(H holder,
-			ViewFinder finder) {
-		initAnyHolder(holder, finder);
+	public static <H extends IAvHolder> void initHolder(H holder, Activity av) {
+		initAnyHolder(holder, new ViewFinder(av));
 	}
 
 	private static void initAnyHolder(Object holder, ViewFinder finder) {
