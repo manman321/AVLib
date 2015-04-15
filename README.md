@@ -12,3 +12,67 @@
 ### Data组件
 * 1、需要实现IAvData接口：比如独立的Activity对应的Data
 * 2、Data中的数据需要通过@DataBind对应Holder的View
+
+### 示例
+* 1、MainHB：MainActivity的独立Holder和Data
+```
+public interface MainHB {
+	public class MainHolder implements IAvHolder {
+		@Id(value = R.id.textView1, backgroundColor = Color.RED)
+		public TextView v;
+		@Id(R.id.listView1)
+		public ListView listView1;
+		public ListAdapter adapter;
+
+		public void setAdapter(ListAdapter adapter) {
+			this.adapter = adapter;
+			listView1.setAdapter(this.adapter);
+		}
+
+		public ListAdapter getAdapter() {
+			return adapter;
+		}
+	}
+
+	public class MainData implements IAvData {
+		@DataBind(id = R.id.textView1, pattern = "yyyy-MM-dd HH:mm:ss", prefix = "￥：")
+		public String text = "" + System.currentTimeMillis();
+	}
+}
+```
+* 2、MainActivity
+```
+public class MainActivity extends AvActivity<MainHolder, MainData> implements
+		OnItemClickListener {
+	private Handler mHandler = new Handler();
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		AvTools.initHolder(holder, this);
+		holder.setAdapter(new ListAdapter(R.layout.item_list));
+		holder.listView1.setOnItemClickListener(this);
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				// data发生变化
+				data.text = System.currentTimeMillis() + "";
+				refreshData();
+			}
+		}, 3000);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Toast.makeText(this, "position=" + position, Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void createHolderAndData() {
+		holder = new MainHolder();
+		data = new MainData();
+	}
+}
+```
