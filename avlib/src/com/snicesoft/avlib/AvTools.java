@@ -79,7 +79,7 @@ public class AvTools {
 	 * 初始化Activity中的View
 	 * 
 	 * @param av
-	 *            Activity本省就符合Holder的规范
+	 *            Activity本身就符合Holder的规范
 	 */
 	public static void initHolder(Activity av) {
 		initAnyHolder(av, new ViewFinder(av));
@@ -129,7 +129,7 @@ public class AvTools {
 	 * @param data
 	 * @param holder
 	 */
-	private static <D extends IAvData> void dataAnyBind(D data, Object holder) {
+	private static void dataAnyBind(Object data, Object holder) {
 		Field[] dataFields = data.getClass().getDeclaredFields();
 		if (dataFields != null && dataFields.length > 0) {
 			for (Field field : dataFields) {
