@@ -5,13 +5,21 @@
 ##Holder和Data规范
 
 ### Holder组件
+####一、规则
+> * 可以是任何Object作为Holder，但是Holder中的View必须通过@Id注解绑定view
+
+####二、实现方式
+	目前提供以下方式
 > * 1、需要实现IAvHolder接口：比如独立的Activity对应的Holder
 > * 2、不需要实现IAvHolder接口：比如Activity直接当做Holder使用
-> * 3、Holder中的View需要通过@Id注解绑定view
 
 ### Data组件
+####一、规则
+> * 可以是任何Object作为Data，但是Data中的数据需要通过@DataBind对应Holder的View
+
+####二、实现方式
+	目前提供以下方式	
 > * 1、需要实现IAvData接口：比如独立的Activity对应的Data
-> * 2、Data中的数据需要通过@DataBind对应Holder的View
 
 ### 示例
 * 1、MainHB：MainActivity的独立Holder和Data
