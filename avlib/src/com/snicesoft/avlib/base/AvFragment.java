@@ -20,13 +20,13 @@ public abstract class AvFragment<H extends IAvHolder, D extends IAvData>
 		return root;
 	}
 
-	public abstract View onCreateView();
+	public abstract View onCreateView(LayoutInflater inflater);
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public final View onCreateView(LayoutInflater inflater,
+			ViewGroup container, Bundle savedInstanceState) {
 		createHolderAndData();
-		root = onCreateView();
+		root = onCreateView(inflater);
 		if (holder != null)
 			AvTools.initHolder(holder, root);
 		else
