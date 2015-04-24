@@ -30,7 +30,7 @@ public abstract class AvFragment<H extends IAvHolder, D extends IAvData>
 		if (holder != null)
 			AvTools.initHolder(holder, root);
 		else
-			AvTools.initHolder(this);
+			AvTools.initHolder(this, root);
 		onAv();
 		return root;
 	}
