@@ -6,6 +6,7 @@ import java.util.Date;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.snicesoft.avlib.annotation.DataBind;
 import com.snicesoft.avlib.annotation.Id;
+import com.snicesoft.avlib.base.AvFragment;
 import com.snicesoft.avlib.view.ViewFinder;
 import com.snicesoft.avlib.widget.IAvData;
 import com.snicesoft.avlib.widget.IAvHolder;
@@ -58,6 +60,10 @@ public class AvTools {
 		dataAnyBind(data, activity);
 	}
 
+	public static <D extends IAvData> void dataBind(D data, Fragment fragment) {
+		dataAnyBind(data, fragment);
+	}
+
 	/**
 	 * 数据绑定
 	 * 
@@ -83,6 +89,17 @@ public class AvTools {
 	 */
 	public static void initHolder(Activity av) {
 		initAnyHolder(av, new ViewFinder(av));
+	}
+
+	/**
+	 * 初始化Activity中的View
+	 * 
+	 * @param av
+	 *            Activity本身就符合Holder的规范
+	 */
+	public static void initHolder(
+			AvFragment<? extends IAvHolder, ? extends IAvData> av) {
+		initAnyHolder(av, new ViewFinder(av.getRootView()));
 	}
 
 	public static <H extends IAvHolder> void initHolder(H holder, View view) {
