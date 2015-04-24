@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.snicesoft.avlib.annotation.DataBind;
 import com.snicesoft.avlib.annotation.Id;
-import com.snicesoft.avlib.base.AvFragment;
 import com.snicesoft.avlib.view.ViewFinder;
 import com.snicesoft.avlib.widget.IAvData;
 import com.snicesoft.avlib.widget.IAvHolder;
@@ -91,15 +90,8 @@ public class AvTools {
 		initAnyHolder(av, new ViewFinder(av));
 	}
 
-	/**
-	 * 初始化Activity中的View
-	 * 
-	 * @param av
-	 *            Activity本身就符合Holder的规范
-	 */
-	public static void initHolder(
-			AvFragment<? extends IAvHolder, ? extends IAvData> av) {
-		initAnyHolder(av, new ViewFinder(av.getRootView()));
+	public static void initHolder(Fragment fragment, View view) {
+		initAnyHolder(fragment, new ViewFinder(view));
 	}
 
 	public static <H extends IAvHolder> void initHolder(H holder, View view) {
