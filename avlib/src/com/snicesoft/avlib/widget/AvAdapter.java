@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.snicesoft.avlib.AvTools;
+import com.snicesoft.avlib.annotation.Layout;
 
 /**
  * @author zhu zhe
@@ -46,9 +47,12 @@ public abstract class AvAdapter<H extends IAvHolder, D extends IAvData> extends
 
 	private int resource;
 
-	public AvAdapter(int resource) {
+	public AvAdapter() {
 		super();
-		this.resource = resource;
+		Layout layout = getClass().getAnnotation(Layout.class);
+		if (layout != null && layout.value() != 0) {
+			this.resource = layout.value();
+		}
 	}
 
 	@Override
