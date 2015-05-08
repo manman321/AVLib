@@ -9,6 +9,8 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,7 +42,7 @@ public class AvTools {
 	}
 
 	public interface LoadImg {
-		void loadImg(String url);
+		void loadImg(View v, int loadingResId, int failResId, String url);
 	}
 
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat();
@@ -132,6 +134,24 @@ public class AvTools {
 			}
 	}
 
+	public static <D extends IAvData, H extends IAvHolder> void dataBindByName(
+			D data, H holder, String name) {
+		try {
+			Field field = data.getClass().getDeclaredField(name);
+			field.setAccessible(true);
+			Object value = field.get(data);
+			DataBind dataBind = field.getAnnotation(DataBind.class);
+			if (dataBind != null && value != null) {
+				int vid = dataBind.id();
+				View view = getView(holder, vid);
+				if (view != null)
+					setValue(view, avTools.new ViewValue(value, dataBind));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * 数据绑定到view
 	 * 
@@ -146,7 +166,7 @@ public class AvTools {
 					field.setAccessible(true);
 					Object value = field.get(data);
 					DataBind dataBind = field.getAnnotation(DataBind.class);
-					if (dataBind != null) {
+					if (dataBind != null && value != null) {
 						int vid = dataBind.id();
 						View view = getView(holder, vid);
 						if (view != null)
@@ -186,12 +206,16 @@ public class AvTools {
 		return v;
 	}
 
-	private static void setValue(View view, ViewValue viewValue) {
-		if (view == null || viewValue == null)
+	@SuppressWarnings("unchecked")
+	private static <T extends View> void setValue(T view, ViewValue viewValue) {
+		if (view == null || viewValue == null || viewValue.getValue() == null
+				|| viewValue.getDataBind() == null)
 			return;
 		Object value = viewValue.getValue();
 		String p = viewValue.getDataBind().prefix();
 		String s = viewValue.getDataBind().suffix();
+		int loading = viewValue.getDataBind().loadingResId();
+		int fail = viewValue.getDataBind().failResId();
 		String pattern = viewValue.getDataBind().pattern();
 		switch (viewValue.getDataBind().dataType()) {
 		case STRING:
@@ -214,7 +238,13 @@ public class AvTools {
 				}
 			} else if (value instanceof String) {
 				if (loadImg != null)
-					loadImg.loadImg(p + value.toString() + s);
+					loadImg.loadImg(view, loading, fail, p + value.toString()
+							+ s);
+			}
+			break;
+		case ADAPTER:
+			if (value instanceof Adapter && view instanceof AdapterView) {
+				((AdapterView<Adapter>) view).setAdapter((Adapter) value);
 			}
 			break;
 		case NULL:

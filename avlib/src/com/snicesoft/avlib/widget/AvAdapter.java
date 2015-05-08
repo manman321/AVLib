@@ -97,7 +97,7 @@ public abstract class AvAdapter<H extends IAvHolder, D extends IAvData> extends
 	 * @param data
 	 * @param position
 	 */
-	public abstract void bindAfter(H holder, D data, int position);
+	public void bindAfter(H holder, D data, int position){}
 
 	/**
 	 * 创建Holder

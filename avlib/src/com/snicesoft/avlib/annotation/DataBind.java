@@ -17,6 +17,10 @@ public @interface DataBind {
 
 	public DataType dataType() default DataType.STRING;
 
+	public int loadingResId() default 0;
+
+	public int failResId() default 0;
+
 	/**
 	 * 前缀
 	 * 

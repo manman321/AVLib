@@ -15,6 +15,10 @@ public enum DataType {
 	 */
 	IMG,
 	/**
+	 * 适配器
+	 */
+	ADAPTER,
+	/**
 	 * 
 	 */
 	NULL
