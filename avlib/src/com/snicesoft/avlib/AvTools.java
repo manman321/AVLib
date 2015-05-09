@@ -140,24 +140,20 @@ public class AvTools {
 			for (String fieldName : fieldNames) {
 				try {
 					Field field = data.getClass().getDeclaredField(fieldName);
-					setValue(data, holder, field);
+					field.setAccessible(true);
+					Object value = field.get(data);
+					DataBind dataBind = field.getAnnotation(DataBind.class);
+					if (dataBind != null && value != null) {
+						int vid = dataBind.id();
+						View view = getView(holder, vid);
+						if (view != null)
+							setValue(view, avTools.new ViewValue(value,
+									dataBind));
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-	}
-
-	private static void setValue(Object data, Object holder, Field field)
-			throws Exception {
-		field.setAccessible(true);
-		Object value = field.get(data);
-		DataBind dataBind = field.getAnnotation(DataBind.class);
-		if (dataBind != null && value != null) {
-			int vid = dataBind.id();
-			View view = getView(holder, vid);
-			if (view != null)
-				setValue(view, avTools.new ViewValue(value, dataBind));
-		}
 	}
 
 	/**
@@ -171,7 +167,16 @@ public class AvTools {
 		if (dataFields != null && dataFields.length > 0) {
 			for (Field field : dataFields) {
 				try {
-					setValue(dataFields, holder, field);
+					field.setAccessible(true);
+					Object value = field.get(data);
+					DataBind dataBind = field.getAnnotation(DataBind.class);
+					if (dataBind != null && value != null) {
+						int vid = dataBind.id();
+						View view = getView(holder, vid);
+						if (view != null)
+							setValue(view, avTools.new ViewValue(value,
+									dataBind));
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
