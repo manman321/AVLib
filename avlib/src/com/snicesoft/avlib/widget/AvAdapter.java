@@ -90,6 +90,10 @@ public abstract class AvAdapter<H extends IAvHolder, D extends IAvData> extends
 		return convertView;
 	}
 
+	public final void refreshDataByName(D data, H holder, String... fieldNames) {
+		AvTools.dataBindByFieldNames(data, holder, fieldNames);
+	}
+
 	/**
 	 * 绑定数据之后，可以自定义数据绑定以及其他业务
 	 * 
@@ -97,7 +101,8 @@ public abstract class AvAdapter<H extends IAvHolder, D extends IAvData> extends
 	 * @param data
 	 * @param position
 	 */
-	public void bindAfter(H holder, D data, int position){}
+	public void bindAfter(H holder, D data, int position) {
+	}
 
 	/**
 	 * 创建Holder
