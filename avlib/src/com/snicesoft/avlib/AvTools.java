@@ -7,6 +7,8 @@ import java.util.Date;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Adapter;
@@ -27,14 +29,10 @@ import com.snicesoft.avlib.widget.IAvHolder;
  */
 @SuppressLint("SimpleDateFormat")
 public class AvTools {
-	private static AvTools avTools;
 
 	private AvTools() {
 	}
 
-	static {
-		avTools = new AvTools();
-	}
 	private static LoadImg loadImg;
 
 	public static void setLoadImg(LoadImg loadImg) {
@@ -76,12 +74,6 @@ public class AvTools {
 		dataAnyBind(data, holder);
 	}
 
-	public static <H extends IAvHolder, D extends IAvData> void initHolderAndData(
-			H holder, D data, Activity activity) {
-		AvTools.initHolder(holder, activity);
-		AvTools.dataBind(data, holder);
-	}
-
 	/**
 	 * 初始化Activity中的View
 	 * 
@@ -105,9 +97,19 @@ public class AvTools {
 	}
 
 	private static void initAnyHolder(Object holder, ViewFinder finder) {
-		Field[] holderFields = holder.getClass().getDeclaredFields();
-		if (holderFields != null && holderFields.length > 0)
-			for (Field field : holderFields) {
+		try {
+			Class<?> clazz = holder.getClass();
+			initHolder(holder, finder, clazz.getDeclaredFields());
+			clazz = clazz.getSuperclass();
+			initHolder(holder, finder, clazz.getDeclaredFields());
+		} catch (Exception e) {
+		}
+	}
+
+	private static void initHolder(Object holder, ViewFinder finder,
+			Field[] fields) {
+		if (fields != null && fields.length > 0)
+			for (Field field : fields) {
 				try {
 					field.setAccessible(true);
 					Id resource = field.getAnnotation(Id.class);
@@ -139,7 +141,8 @@ public class AvTools {
 		if (fieldNames.length > 0)
 			for (String fieldName : fieldNames) {
 				try {
-					Field field = data.getClass().getDeclaredField(fieldName);
+					Class<?> clazz = data.getClass();
+					Field field = clazz.getDeclaredField(fieldName);
 					field.setAccessible(true);
 					Object value = field.get(data);
 					DataBind dataBind = field.getAnnotation(DataBind.class);
@@ -147,11 +150,23 @@ public class AvTools {
 						int vid = dataBind.id();
 						View view = getView(holder, vid);
 						if (view != null)
-							setValue(view, avTools.new ViewValue(value,
-									dataBind));
+							setValue(view, new ViewValue(value, dataBind));
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+				}
+				try {
+					Class<?> clazz = data.getClass().getSuperclass();
+					Field field = clazz.getDeclaredField(fieldName);
+					field.setAccessible(true);
+					Object value = field.get(data);
+					DataBind dataBind = field.getAnnotation(DataBind.class);
+					if (dataBind != null && value != null) {
+						int vid = dataBind.id();
+						View view = getView(holder, vid);
+						if (view != null)
+							setValue(view, new ViewValue(value, dataBind));
+					}
+				} catch (Exception e) {
 				}
 			}
 	}
@@ -163,7 +178,17 @@ public class AvTools {
 	 * @param holder
 	 */
 	private static void dataAnyBind(Object data, Object holder) {
-		Field[] dataFields = data.getClass().getDeclaredFields();
+		try {
+			Class<?> clazz = data.getClass();
+			dataBind(data, holder, clazz.getDeclaredFields());
+			clazz = clazz.getSuperclass();
+			dataBind(data, holder, clazz.getDeclaredFields());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void dataBind(Object data, Object holder, Field[] dataFields) {
 		if (dataFields != null && dataFields.length > 0) {
 			for (Field field : dataFields) {
 				try {
@@ -174,8 +199,7 @@ public class AvTools {
 						int vid = dataBind.id();
 						View view = getView(holder, vid);
 						if (view != null)
-							setValue(view, avTools.new ViewValue(value,
-									dataBind));
+							setValue(view, new ViewValue(value, dataBind));
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -193,20 +217,34 @@ public class AvTools {
 	 */
 	private static View getView(Object holder, int vid) {
 		View v = null;
-		Field[] holderFields = holder.getClass().getDeclaredFields();
-		if (holderFields != null && holderFields.length > 0)
-			for (Field field : holderFields) {
-				try {
-					field.setAccessible(true);
-					v = (View) field.get(holder);
-					Id resource = field.getAnnotation(Id.class);
-					if (resource != null && resource.value() == vid) {
-						break;
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+		Class<?> clazz = holder.getClass();
+		Field[] fields = clazz.getDeclaredFields();
+		for (Field field : fields) {
+			try {
+				field.setAccessible(true);
+				v = (View) field.get(holder);
+				Id resource = field.getAnnotation(Id.class);
+				if (resource != null && resource.value() == vid) {
+					return v;
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+		}
+		v = null;
+		fields = clazz.getSuperclass().getDeclaredFields();
+		for (Field field : fields) {
+			try {
+				field.setAccessible(true);
+				v = (View) field.get(holder);
+				Id resource = field.getAnnotation(Id.class);
+				if (resource != null && resource.value() == vid) {
+					return v;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return v;
 	}
 
@@ -250,6 +288,9 @@ public class AvTools {
 			if (value instanceof Adapter && view instanceof AdapterView) {
 				((AdapterView<Adapter>) view).setAdapter((Adapter) value);
 			}
+			if (value instanceof PagerAdapter && view instanceof ViewPager) {
+				((ViewPager) view).setAdapter((PagerAdapter) value);
+			}
 			break;
 		case NULL:
 			break;
@@ -258,9 +299,9 @@ public class AvTools {
 		}
 	}
 
-	private class ViewValue {
-		private Object value;
-		private DataBind dataBind;
+	public static class ViewValue {
+		public Object value;
+		public DataBind dataBind;
 
 		public DataBind getDataBind() {
 			return dataBind;
