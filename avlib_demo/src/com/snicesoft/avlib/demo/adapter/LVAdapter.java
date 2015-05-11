@@ -16,11 +16,6 @@ public class LVAdapter extends AvAdapter<LVHolder, LVData> {
 	}
 
 	@Override
-	public void bindAfter(LVHolder holder, LVData data, int position) {
-
-	}
-
-	@Override
 	public LVHolder newHolder() {
 		return new LVHolder();
 	}

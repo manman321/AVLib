@@ -11,11 +11,6 @@ import com.snicesoft.avlib.demo.hd.MainHD.MainHolder;
 @Layout(R.layout.activity_main)
 public class MainActivity extends AvActivity<MainHolder, MainData> implements
 		OnClickListener {
-
-	@Override
-	public void onCreate() {
-	}
-
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
