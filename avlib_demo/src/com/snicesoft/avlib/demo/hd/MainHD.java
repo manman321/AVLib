@@ -5,8 +5,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.snicesoft.avlib.annotation.DataBind;
+import com.snicesoft.avlib.annotation.DataType;
 import com.snicesoft.avlib.annotation.Id;
 import com.snicesoft.avlib.demo.R;
+import com.snicesoft.avlib.demo.adapter.LVAdapter;
 import com.snicesoft.avlib.widget.IAvData;
 import com.snicesoft.avlib.widget.IAvHolder;
 
@@ -25,6 +27,8 @@ public interface MainHD {
 		public String text = "我是来自MainData";
 		@DataBind(id = R.id.btnTest)
 		public String btn = "From MainData";
+		@DataBind(id = R.id.lv, dataType = DataType.ADAPTER)
+		private LVAdapter lvAdapter = new LVAdapter();
 
 	}
 }

@@ -5,7 +5,6 @@ import android.view.View.OnClickListener;
 
 import com.snicesoft.avlib.annotation.Layout;
 import com.snicesoft.avlib.base.AvActivity;
-import com.snicesoft.avlib.demo.adapter.LVAdapter;
 import com.snicesoft.avlib.demo.hd.MainHD.MainData;
 import com.snicesoft.avlib.demo.hd.MainHD.MainHolder;
 
@@ -14,14 +13,7 @@ public class MainActivity extends AvActivity<MainHolder, MainData> implements
 		OnClickListener {
 
 	@Override
-	public void createHolderAndData() {
-		holder = new MainHolder();
-		data = new MainData();
-	}
-
-	@Override
 	public void onCreate() {
-		holder.lv.setAdapter(new LVAdapter());
 	}
 
 	@Override
@@ -35,4 +27,15 @@ public class MainActivity extends AvActivity<MainHolder, MainData> implements
 			break;
 		}
 	}
+
+	@Override
+	public MainHolder newHolder() {
+		return new MainHolder();
+	}
+
+	@Override
+	public MainData newData() {
+		return new MainData();
+	}
+
 }
