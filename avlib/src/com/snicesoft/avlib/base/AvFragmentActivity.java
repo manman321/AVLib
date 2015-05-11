@@ -17,37 +17,34 @@ import com.snicesoft.avlib.widget.IAvHolder;
  * @param <D>
  */
 public abstract class AvFragmentActivity<H extends IAvHolder, D extends IAvData>
-		extends FragmentActivity {
+		extends FragmentActivity implements IAv<H, D> {
 	protected D data;
 	protected H holder;
 
-	public abstract void createHolderAndData();
+	public final void dataBindAll() {
+		AvUtils.dataBindAll(holder, data, this);
+	}
 
-	public final void dataBind() {
-		if (holder == null && data != null)
-			AvTools.dataBind(data, this);
-		if (holder != null && data != null)
-			AvTools.dataBind(data, holder);
+	public final void dataBindByName(String... fieldNames) {
+		AvTools.dataBindByFieldNames(data, holder, fieldNames);
 	}
 
 	public void onCreate() {
-		dataBind();
+		dataBindAll();
 	}
 
 	@Override
 	protected final void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		createHolderAndData();
+		holder = newHolder();
+		data = newData();
 		Layout layout = getClass().getAnnotation(Layout.class);
 		if (layout != null && layout.value() != 0) {
 			setContentView(layout.value());
 		} else {
 			System.err.println("@Layout not find.");
 		}
-		if (holder != null)
-			AvTools.initHolder(holder, this);
-		else
-			AvTools.initHolder(this);
+		AvUtils.initHolder(holder, this);
 		onCreate();
 	}
 }
