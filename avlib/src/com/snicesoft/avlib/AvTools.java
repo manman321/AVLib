@@ -100,9 +100,12 @@ public class AvTools {
 		try {
 			Class<?> clazz = holder.getClass();
 			initHolder(holder, finder, clazz.getDeclaredFields());
-			clazz = clazz.getSuperclass();
-			initHolder(holder, finder, clazz.getDeclaredFields());
+			if (clazz.getSuperclass() != Object.class) {
+				clazz = clazz.getSuperclass();
+				initHolder(holder, finder, clazz.getDeclaredFields());
+			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -153,20 +156,24 @@ public class AvTools {
 							setValue(view, new ViewValue(value, dataBind));
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				try {
-					Class<?> clazz = data.getClass().getSuperclass();
-					Field field = clazz.getDeclaredField(fieldName);
-					field.setAccessible(true);
-					Object value = field.get(data);
-					DataBind dataBind = field.getAnnotation(DataBind.class);
-					if (dataBind != null && value != null) {
-						int vid = dataBind.id();
-						View view = getView(holder, vid);
-						if (view != null)
-							setValue(view, new ViewValue(value, dataBind));
+				if (data.getClass().getSuperclass() != Object.class) {
+					try {
+						Class<?> clazz = data.getClass().getSuperclass();
+						Field field = clazz.getDeclaredField(fieldName);
+						field.setAccessible(true);
+						Object value = field.get(data);
+						DataBind dataBind = field.getAnnotation(DataBind.class);
+						if (dataBind != null && value != null) {
+							int vid = dataBind.id();
+							View view = getView(holder, vid);
+							if (view != null)
+								setValue(view, new ViewValue(value, dataBind));
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
 				}
 			}
 	}
@@ -181,8 +188,10 @@ public class AvTools {
 		try {
 			Class<?> clazz = data.getClass();
 			dataBind(data, holder, clazz.getDeclaredFields());
-			clazz = clazz.getSuperclass();
-			dataBind(data, holder, clazz.getDeclaredFields());
+			if (clazz.getSuperclass() != Object.class) {
+				clazz = clazz.getSuperclass();
+				dataBind(data, holder, clazz.getDeclaredFields());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -232,17 +241,19 @@ public class AvTools {
 			}
 		}
 		v = null;
-		fields = clazz.getSuperclass().getDeclaredFields();
-		for (Field field : fields) {
-			try {
-				field.setAccessible(true);
-				v = (View) field.get(holder);
-				Id resource = field.getAnnotation(Id.class);
-				if (resource != null && resource.value() == vid) {
-					return v;
+		if (clazz.getSuperclass() != Object.class) {
+			fields = clazz.getSuperclass().getDeclaredFields();
+			for (Field field : fields) {
+				try {
+					field.setAccessible(true);
+					v = (View) field.get(holder);
+					Id resource = field.getAnnotation(Id.class);
+					if (resource != null && resource.value() == vid) {
+						return v;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 		return v;
