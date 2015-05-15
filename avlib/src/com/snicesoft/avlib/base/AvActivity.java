@@ -23,12 +23,11 @@ public abstract class AvActivity<H extends IHolder, D extends IData> extends
 	protected H holder;
 
 	public final void dataBindAll() {
-		AvUtils.dataBindAll(holder, data, this);
+		AVLib.dataBind(data, holder);
 	}
 
 	public final void dataBindTo(String fieldName) {
-		if (data != null && holder != null)
-			AVLib.dataBindTo(data, holder, fieldName);
+		AVLib.dataBindTo(data, holder, fieldName);
 	}
 
 	@Override

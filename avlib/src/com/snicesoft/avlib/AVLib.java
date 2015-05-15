@@ -103,6 +103,8 @@ public class AVLib {
 	 * @param holder
 	 */
 	private static void dataBindAll(Object data, Object holder) {
+		if (data == null || holder == null)
+			return;
 		try {
 			Class<?> clazz = data.getClass();
 			dataBind(data, holder, clazz);
@@ -117,6 +119,8 @@ public class AVLib {
 
 	public static <D extends IData, H extends IHolder> void dataBindTo(D data,
 			H holder, String fieldName) {
+		if (data == null || holder == null || TextUtils.isEmpty(fieldName))
+			return;
 		try {
 			Class<?> clazz = data.getClass();
 			Field field = clazz.getDeclaredField(fieldName);
@@ -237,6 +241,8 @@ public class AVLib {
 	}
 
 	private static void initHolderAll(Object holder, ViewFinder finder) {
+		if (holder == null || finder == null)
+			return;
 		try {
 			Class<?> clazz = holder.getClass();
 			initHolder(holder, finder, clazz);

@@ -23,7 +23,7 @@ public abstract class AvFragmentActivity<H extends IHolder, D extends IData>
 	protected H holder;
 
 	public final void dataBindAll() {
-		AvUtils.dataBindAll(holder, data, this);
+		AVLib.dataBind(data, holder);
 	}
 
 	public final void dataBindTo(String fieldName) {

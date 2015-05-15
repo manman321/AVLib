@@ -34,13 +34,13 @@ public abstract class AvFragment<H extends IHolder, D extends IData, FA extends 
 		} else {
 			System.err.println("@Layout not find.");
 		}
-		AvUtils.initHolder(this, holder);
+		AvUtils.initHolder(holder, this);
 		dataBindAll();
 		return root;
 	}
 
 	public final void dataBindAll() {
-		AvUtils.dataBindAll(holder, data, this);
+		AVLib.dataBind(data, holder);
 	}
 
 	public final void dataBindTo(String fieldName) {
