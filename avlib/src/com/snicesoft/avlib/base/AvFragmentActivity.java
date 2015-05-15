@@ -3,10 +3,11 @@ package com.snicesoft.avlib.base;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.snicesoft.avlib.AvTools;
+import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.annotation.Layout;
-import com.snicesoft.avlib.widget.IAvData;
-import com.snicesoft.avlib.widget.IAvHolder;
+import com.snicesoft.avlib.pluginmgr.Proxy;
+import com.snicesoft.avlib.rule.IData;
+import com.snicesoft.avlib.rule.IHolder;
 
 /**
  * FragmentActivity基类
@@ -16,7 +17,7 @@ import com.snicesoft.avlib.widget.IAvHolder;
  * @param <H>
  * @param <D>
  */
-public abstract class AvFragmentActivity<H extends IAvHolder, D extends IAvData>
+public abstract class AvFragmentActivity<H extends IHolder, D extends IData>
 		extends FragmentActivity implements IAv<H, D> {
 	protected D data;
 	protected H holder;
@@ -25,26 +26,30 @@ public abstract class AvFragmentActivity<H extends IAvHolder, D extends IAvData>
 		AvUtils.dataBindAll(holder, data, this);
 	}
 
-	public final void dataBindByName(String... fieldNames) {
-		AvTools.dataBindByFieldNames(data, holder, fieldNames);
-	}
-
-	public void onCreate() {
-		dataBindAll();
+	public final void dataBindTo(String fieldName) {
+		AVLib.dataBindTo(data, holder, fieldName);
 	}
 
 	@Override
-	protected final void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		holder = newHolder();
 		data = newData();
-		Layout layout = getClass().getAnnotation(Layout.class);
+		Layout layout = getThisClass().getAnnotation(Layout.class);
 		if (layout != null && layout.value() != 0) {
 			setContentView(layout.value());
 		} else {
 			System.err.println("@Layout not find.");
 		}
 		AvUtils.initHolder(holder, this);
-		onCreate();
+		dataBindAll();
+	}
+
+	public Class<?> getThisClass() {
+		Class<?> clazz = getClass();
+		if (Proxy.PROXY_ACTIVITY.equals(clazz.getName())) {
+			clazz = getClass().getSuperclass();
+		}
+		return clazz;
 	}
 }

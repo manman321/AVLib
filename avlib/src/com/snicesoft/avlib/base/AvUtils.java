@@ -2,43 +2,43 @@ package com.snicesoft.avlib.base;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
-import android.view.View;
 
-import com.snicesoft.avlib.AvTools;
-import com.snicesoft.avlib.widget.IAvData;
-import com.snicesoft.avlib.widget.IAvHolder;
+import com.snicesoft.avlib.AVLib;
+import com.snicesoft.avlib.rule.IData;
+import com.snicesoft.avlib.rule.IHolder;
 
-public class AvUtils {
-	protected static <D extends IAvData, H extends IAvHolder> void dataBindAll(
+class AvUtils {
+	public static <D extends IData, H extends IHolder> void dataBindAll(
 			H holder, D data, Activity activity) {
 		if (holder == null && data != null)
-			AvTools.dataBind(data, activity);
+			if (activity instanceof IHolder)
+				AVLib.dataBind(data, (IHolder) activity);
 		if (holder != null && data != null)
-			AvTools.dataBind(data, holder);
+			AVLib.dataBind(data, holder);
 	}
 
-	protected static <D extends IAvData, H extends IAvHolder> void dataBindAll(
+	public static <D extends IData, H extends IHolder> void dataBindAll(
 			H holder, D data, Fragment fragment) {
 		if (holder == null && data != null)
-			AvTools.dataBind(data, fragment);
+			if (fragment instanceof IHolder)
+				AVLib.dataBind(data, (IHolder) fragment);
 		if (holder != null && data != null)
-			AvTools.dataBind(data, holder);
+			AVLib.dataBind(data, holder);
 	}
 
-	protected static <H extends IAvHolder> void initHolder(H holder,
+	public static <H extends IHolder> void initHolder(H holder,
 			Activity activity) {
 		if (holder != null)
-			AvTools.initHolder(holder, activity);
+			AVLib.initHolder(holder, activity);
 		else
-			AvTools.initHolder(activity);
+			AVLib.initHolder(activity);
 	}
 
-	protected static <H extends IAvHolder> void initHolder(Fragment f,
-			H holder, View v) {
+	public static <H extends IHolder> void initHolder(Fragment f, H holder) {
 		if (holder != null)
-			AvTools.initHolder(holder, v);
+			AVLib.initHolder(holder, f);
 		else
-			AvTools.initHolder(f, v);
+			AVLib.initHolder(f);
 	}
 
 }
