@@ -9,11 +9,11 @@ import com.snicesoft.avlib.annotation.DataType;
 import com.snicesoft.avlib.annotation.Id;
 import com.snicesoft.avlib.demo.R;
 import com.snicesoft.avlib.demo.adapter.LVAdapter;
-import com.snicesoft.avlib.widget.IAvData;
-import com.snicesoft.avlib.widget.IAvHolder;
+import com.snicesoft.avlib.rule.IData;
+import com.snicesoft.avlib.rule.IHolder;
 
 public interface MainHD {
-	public class MainHolder implements IAvHolder {
+	public class MainHolder implements IHolder {
 		@Id(R.id.tvText)
 		public TextView tvText;
 		@Id(R.id.btnTest)
@@ -22,7 +22,7 @@ public interface MainHD {
 		public ListView lv;
 	}
 
-	public class MainData implements IAvData {
+	public class MainData implements IData {
 		@DataBind(id = R.id.tvText)
 		public String text = "我是来自MainData";
 		@DataBind(id = R.id.btnTest)

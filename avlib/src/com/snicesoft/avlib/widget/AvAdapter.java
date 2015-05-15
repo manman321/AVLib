@@ -7,15 +7,17 @@ import java.util.List;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.snicesoft.avlib.AvTools;
+import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.annotation.Layout;
+import com.snicesoft.avlib.rule.IData;
+import com.snicesoft.avlib.rule.IHolder;
 
 /**
  * @author zhu zhe
  * @since 2015年4月15日 上午9:52:57
  * @version V1.0
  */
-public abstract class AvAdapter<H extends IAvHolder, D extends IAvData> extends
+public abstract class AvAdapter<H extends IHolder, D extends IData> extends
 		android.widget.BaseAdapter {
 	private List<D> dataList = new ArrayList<D>();
 
@@ -77,21 +79,21 @@ public abstract class AvAdapter<H extends IAvHolder, D extends IAvData> extends
 		if (convertView == null) {
 			holder = newHolder();
 			convertView = View.inflate(parent.getContext(), resource, null);
-			AvTools.initHolder(holder, convertView);
+			AVLib.initHolder(holder, convertView);
 			convertView.setTag(holder);
 		} else {
 			holder = (H) convertView.getTag();
 		}
 		D data = getData(position);
 		if (data != null) {
-			AvTools.dataBind(data, holder);
+			AVLib.dataBind(data, holder);
 			bindAfter(holder, data, position);
 		}
 		return convertView;
 	}
 
-	public final void refreshDataByName(D data, H holder, String... fieldNames) {
-		AvTools.dataBindByFieldNames(data, holder, fieldNames);
+	public final void refreshDataByName(D data, H holder, String fieldName) {
+		AVLib.dataBindTo(data, holder, fieldName);
 	}
 
 	/**
@@ -118,8 +120,11 @@ public abstract class AvAdapter<H extends IAvHolder, D extends IAvData> extends
 	 * @return
 	 */
 	public D getData(int position) {
-		if (dataList == null)
+		if (dataList == null || dataList.isEmpty())
 			return null;
+		if (position >= dataList.size()) {
+			return null;
+		}
 		return dataList.get(position);
 	}
 }
