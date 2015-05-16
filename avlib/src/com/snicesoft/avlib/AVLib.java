@@ -86,6 +86,8 @@ public class AVLib {
 		Field[] dataFields = clazz.getDeclaredFields();
 		if (dataFields != null && dataFields.length > 0) {
 			for (Field field : dataFields) {
+				if (field.getAnnotation(DataBind.class) == null)
+					continue;
 				try {
 					field.setAccessible(true);
 					bindValue(data, holder, field);
@@ -153,6 +155,8 @@ public class AVLib {
 		Class<?> clazz = holder.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
+			if (field.getAnnotation(Id.class) == null)
+				continue;
 			try {
 				field.setAccessible(true);
 				v = (View) field.get(holder);
@@ -168,6 +172,8 @@ public class AVLib {
 		if (isNotObject(clazz)) {
 			fields = clazz.getSuperclass().getDeclaredFields();
 			for (Field field : fields) {
+				if (field.getAnnotation(Id.class) == null)
+					continue;
 				try {
 					field.setAccessible(true);
 					v = (View) field.get(holder);
@@ -217,22 +223,22 @@ public class AVLib {
 				try {
 					field.setAccessible(true);
 					Id resource = field.getAnnotation(Id.class);
-					if (resource != null) {
-						int resId = resource.value();
-						int background = resource.background();
-						int backgroundColor = resource.backgroundColor();
-						int src = resource.src();
-						View v = finder.findViewById(resId);
-						if (v != null) {
-							if (backgroundColor != 0)
-								v.setBackgroundColor(backgroundColor);
-							if (background != 0)
-								v.setBackgroundResource(background);
-							if (src != 0 && v instanceof ImageView)
-								((ImageView) v).setImageResource(src);
-							if (field.get(holder) == null)
-								field.set(holder, v);
-						}
+					if (resource == null)
+						continue;
+					int resId = resource.value();
+					int background = resource.background();
+					int backgroundColor = resource.backgroundColor();
+					int src = resource.src();
+					View v = finder.findViewById(resId);
+					if (v != null) {
+						if (backgroundColor != 0)
+							v.setBackgroundColor(backgroundColor);
+						if (background != 0)
+							v.setBackgroundResource(background);
+						if (src != 0 && v instanceof ImageView)
+							((ImageView) v).setImageResource(src);
+						if (field.get(holder) == null)
+							field.set(holder, v);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

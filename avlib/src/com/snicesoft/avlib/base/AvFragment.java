@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.snicesoft.avlib.AVLib;
-import com.snicesoft.avlib.annotation.Layout;
 import com.snicesoft.avlib.rule.IData;
 import com.snicesoft.avlib.rule.IHolder;
 
@@ -27,13 +26,7 @@ public abstract class AvFragment<H extends IHolder, D extends IData, FA extends 
 			Bundle savedInstanceState) {
 		holder = newHolder();
 		data = newData();
-		View root = null;
-		Layout layout = getClass().getAnnotation(Layout.class);
-		if (layout != null && layout.value() != 0) {
-			root = inflater.inflate(layout.value(), null);
-		} else {
-			System.err.println("@Layout not find.");
-		}
+		View root = inflater.inflate(LayoutUtils.getLayoutId(getClass()), null);
 		AvUtils.initHolder(holder, this);
 		dataBindAll();
 		return root;

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.snicesoft.avlib.AVLib;
-import com.snicesoft.avlib.annotation.Layout;
 import com.snicesoft.avlib.pluginmgr.Proxy;
 import com.snicesoft.avlib.rule.IData;
 import com.snicesoft.avlib.rule.IHolder;
@@ -35,12 +34,7 @@ public abstract class AvFragmentActivity<H extends IHolder, D extends IData>
 		super.onCreate(savedInstanceState);
 		holder = newHolder();
 		data = newData();
-		Layout layout = getThisClass().getAnnotation(Layout.class);
-		if (layout != null && layout.value() != 0) {
-			setContentView(layout.value());
-		} else {
-			System.err.println("@Layout not find.");
-		}
+		setContentView(LayoutUtils.getLayoutId(getThisClass()));
 		AvUtils.initHolder(holder, this);
 		dataBindAll();
 	}
