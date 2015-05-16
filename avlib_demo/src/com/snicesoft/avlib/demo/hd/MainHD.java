@@ -18,6 +18,8 @@ public interface MainHD {
 		public TextView tvText;
 		@Id(R.id.btnTest)
 		public Button btnTest;
+		@Id(R.id.btnOpen)
+		public Button btnOpen;
 		@Id(R.id.lv)
 		public ListView lv;
 	}
@@ -26,7 +28,9 @@ public interface MainHD {
 		@DataBind(id = R.id.tvText)
 		public String text = "我是来自MainData";
 		@DataBind(id = R.id.btnTest)
-		public String btn = "From MainData";
+		public String btn = "Load Fragment";
+		@DataBind(id = R.id.btnOpen)
+		public String open = "Open TestActivity";
 		@DataBind(id = R.id.lv, dataType = DataType.ADAPTER)
 		private LVAdapter lvAdapter = new LVAdapter();
 

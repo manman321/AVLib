@@ -1,6 +1,6 @@
 package com.snicesoft.avlib.demo;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -14,24 +14,14 @@ public class MainActivity extends AvFragmentActivity<MainHolder, MainData>
 		implements OnClickListener {
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-		setTitle(R.string.app_name);
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		// hostContext = HostManager.getHostContext();
-	}
-
-	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnTest:
 			FragmentUtil.openFragment(this, R.id.content, new TestFragment());
 			break;
-
+		case R.id.btnOpen:
+			startActivity(new Intent(this, TestActivity.class));
+			break;
 		default:
 			break;
 		}

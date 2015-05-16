@@ -1,22 +1,22 @@
 package com.snicesoft.avlib.demo;
 
-import android.support.v4.app.FragmentActivity;
-
 import com.snicesoft.avlib.annotation.Layout;
 import com.snicesoft.avlib.base.AvFragment;
-import com.snicesoft.avlib.rule.IData;
-import com.snicesoft.avlib.rule.IHolder;
+import com.snicesoft.avlib.demo.hd.TestHD.TestData;
+import com.snicesoft.avlib.demo.hd.TestHD.TestHolder;
 
 @Layout(R.layout.fragment_test)
-public class TestFragment extends AvFragment<IHolder, IData, FragmentActivity> {
+public class TestFragment extends
+		AvFragment<TestHolder, TestData, MainActivity> {
 
 	@Override
-	public IData newData() {
-		return null;
+	public TestHolder newHolder() {
+		return new TestHolder();
 	}
 
 	@Override
-	public IHolder newHolder() {
-		return null;
+	public TestData newData() {
+		return new TestData();
 	}
+
 }
