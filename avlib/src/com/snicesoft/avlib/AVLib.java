@@ -281,7 +281,7 @@ public class AVLib {
 		case STRING:
 			TextView tv = (TextView) view;
 			if (TextUtils.isEmpty(pattern)) {
-				tv.setText(p + value.toString() + s);
+				tv.setText(p + value + s);
 			} else {
 				dateFormat.applyPattern(pattern);
 				if (value instanceof Long || value instanceof Date) {

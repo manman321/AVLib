@@ -9,7 +9,6 @@ import com.snicesoft.avlib.rule.IData;
 import com.snicesoft.avlib.rule.IHolder;
 
 /**
- * 普通Activity基类
  * 
  * @author zhe
  *
@@ -45,5 +44,13 @@ public abstract class AvActivity<H extends IHolder, D extends IData> extends
 			clazz = getClass().getSuperclass();
 		}
 		return clazz;
+	}
+
+	public final D getData() {
+		return data;
+	}
+
+	public final H getHolder() {
+		return holder;
 	}
 }

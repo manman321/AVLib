@@ -39,4 +39,12 @@ public abstract class AvFragment<H extends IHolder, D extends IData, FA extends 
 	public final void dataBindTo(String fieldName) {
 		AVLib.dataBindTo(data, holder, fieldName);
 	}
+
+	public final D getData() {
+		return data;
+	}
+
+	public final H getHolder() {
+		return holder;
+	}
 }

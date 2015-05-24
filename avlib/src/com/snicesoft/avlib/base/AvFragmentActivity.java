@@ -46,4 +46,12 @@ public abstract class AvFragmentActivity<H extends IHolder, D extends IData>
 		}
 		return clazz;
 	}
+
+	public final D getData() {
+		return data;
+	}
+
+	public final H getHolder() {
+		return holder;
+	}
 }
