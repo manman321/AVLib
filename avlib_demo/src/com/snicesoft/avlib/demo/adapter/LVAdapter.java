@@ -10,9 +10,6 @@ import com.snicesoft.avlib.widget.AvAdapter;
 public class LVAdapter extends AvAdapter<LVHolder, LVData> {
 
 	public LVAdapter() {
-		for (int i = 0; i < 20; i++) {
-			add(new LVData(i + 1));
-		}
 	}
 
 	@Override

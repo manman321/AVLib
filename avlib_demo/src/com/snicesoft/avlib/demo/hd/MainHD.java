@@ -32,7 +32,7 @@ public interface MainHD {
 		@DataBind(id = R.id.btnOpen)
 		public String open = "Open TestActivity";
 		@DataBind(id = R.id.lv, dataType = DataType.ADAPTER)
-		private LVAdapter lvAdapter = new LVAdapter();
+		public LVAdapter lvAdapter = new LVAdapter();
 
 	}
 }
