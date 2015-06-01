@@ -2,6 +2,8 @@ package com.snicesoft.avlib.base;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.pluginmgr.Proxy;
@@ -17,7 +19,7 @@ import com.snicesoft.avlib.rule.IHolder;
  * @param <D>
  */
 public abstract class AvFragmentActivity<H extends IHolder, D extends IData>
-		extends FragmentActivity implements IAv<H, D> {
+		extends FragmentActivity implements IAv<H, D>, OnClickListener {
 	protected D data;
 	protected H holder;
 
@@ -54,5 +56,15 @@ public abstract class AvFragmentActivity<H extends IHolder, D extends IData>
 
 	public final H getHolder() {
 		return holder;
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v == null)
+			return;
+		if (holder != null) {
+			holder.onClick(v);
+			return;
+		}
 	}
 }

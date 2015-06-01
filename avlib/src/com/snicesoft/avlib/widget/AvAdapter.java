@@ -87,14 +87,11 @@ public abstract class AvAdapter<H extends IHolder, D extends IData> extends
 		}
 		D data = getData(position);
 		if (data != null) {
+			holder.setTag(data);
 			AVLib.dataBind(data, holder);
 			bindAfter(holder, data, position);
 		}
 		return convertView;
-	}
-
-	public final void refreshDataByName(D data, H holder, String fieldName) {
-		AVLib.dataBindTo(data, holder, fieldName);
 	}
 
 	/**
