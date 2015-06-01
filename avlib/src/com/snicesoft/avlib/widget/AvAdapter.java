@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,6 +12,7 @@ import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.annotation.Layout;
 import com.snicesoft.avlib.rule.IData;
 import com.snicesoft.avlib.rule.IHolder;
+import com.snicesoft.avlib.rule.IRule;
 
 /**
  * @author zhu zhe
@@ -18,7 +20,7 @@ import com.snicesoft.avlib.rule.IHolder;
  * @version V1.0
  */
 public abstract class AvAdapter<H extends IHolder, D extends IData> extends
-		android.widget.BaseAdapter {
+		android.widget.BaseAdapter implements IRule {
 	private List<D> dataList = new ArrayList<D>();
 
 	public void setDataList(Collection<D> dataList) {
@@ -49,12 +51,24 @@ public abstract class AvAdapter<H extends IHolder, D extends IData> extends
 
 	private int resource;
 
-	public AvAdapter() {
+	private AvAdapter() {
 		super();
 		Layout layout = getClass().getAnnotation(Layout.class);
 		if (layout != null && layout.value() != 0) {
 			this.resource = layout.value();
 		}
+	}
+
+	private Context context;
+
+	@Override
+	public Context getContext() {
+		return context;
+	}
+
+	public AvAdapter(Context context) {
+		this();
+		this.context = context;
 	}
 
 	@Override
@@ -87,14 +101,11 @@ public abstract class AvAdapter<H extends IHolder, D extends IData> extends
 		}
 		D data = getData(position);
 		if (data != null) {
+			holder.setTag(data);
 			AVLib.dataBind(data, holder);
 			bindAfter(holder, data, position);
 		}
 		return convertView;
-	}
-
-	public final void refreshDataByName(D data, H holder, String fieldName) {
-		AVLib.dataBindTo(data, holder, fieldName);
 	}
 
 	/**
