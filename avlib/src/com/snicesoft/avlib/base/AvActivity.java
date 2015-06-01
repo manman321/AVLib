@@ -35,6 +35,7 @@ public abstract class AvActivity<H extends IHolder, D extends IData> extends
 		data = newData();
 		setContentView(LayoutUtils.getLayoutId(getThisClass()));
 		AvUtils.initHolder(holder, this);
+		holder.initViewParams();
 		dataBindAll();
 	}
 

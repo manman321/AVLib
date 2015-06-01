@@ -36,6 +36,7 @@ public abstract class AvFragmentActivity<H extends IHolder, D extends IData>
 		data = newData();
 		setContentView(LayoutUtils.getLayoutId(getThisClass()));
 		AvUtils.initHolder(holder, this);
+		holder.initViewParams();
 		dataBindAll();
 	}
 
