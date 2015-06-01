@@ -30,4 +30,9 @@ public class TestActivity extends Activity implements IHolder, IData {
 		AVLib.initHolder(this);
 		AVLib.dataBind(this, this);
 	}
+
+	@Override
+	public void initViewParams() {
+		
+	}
 }

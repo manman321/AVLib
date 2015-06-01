@@ -22,6 +22,11 @@ public interface MainHD {
 		public Button btnOpen;
 		@Id(R.id.lv)
 		public ListView lv;
+		@Override
+		public void initViewParams() {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 	public class MainData implements IData {

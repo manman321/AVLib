@@ -28,6 +28,7 @@ public abstract class AvFragment<H extends IHolder, D extends IData, FA extends 
 		data = newData();
 		View root = inflater.inflate(LayoutUtils.getLayoutId(getClass()), null);
 		AvUtils.initHolder(holder, this);
+		holder.initViewParams();
 		dataBindAll();
 		return root;
 	}

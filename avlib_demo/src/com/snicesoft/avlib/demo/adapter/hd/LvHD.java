@@ -12,6 +12,11 @@ public interface LvHD {
 	public class LVHolder implements IHolder {
 		@Id(R.id.tvItemValue)
 		public TextView tvItemValue;
+
+		@Override
+		public void initViewParams() {
+			
+		}
 	}
 
 	public class LVData implements IData {
