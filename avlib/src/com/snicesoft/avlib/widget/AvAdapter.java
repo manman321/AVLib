@@ -12,7 +12,6 @@ import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.annotation.Layout;
 import com.snicesoft.avlib.rule.IData;
 import com.snicesoft.avlib.rule.IHolder;
-import com.snicesoft.avlib.rule.IRule;
 
 /**
  * @author zhu zhe
@@ -20,7 +19,7 @@ import com.snicesoft.avlib.rule.IRule;
  * @version V1.0
  */
 public abstract class AvAdapter<H extends IHolder, D extends IData> extends
-		android.widget.BaseAdapter implements IRule {
+		android.widget.BaseAdapter {
 	private List<D> dataList = new ArrayList<D>();
 
 	public void setDataList(Collection<D> dataList) {
@@ -61,7 +60,6 @@ public abstract class AvAdapter<H extends IHolder, D extends IData> extends
 
 	private Context context;
 
-	@Override
 	public Context getContext() {
 		return context;
 	}

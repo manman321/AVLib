@@ -20,25 +20,34 @@ import com.snicesoft.avlib.rule.IHolder;
  */
 public abstract class AvFragmentActivity<H extends IHolder, D extends IData>
 		extends FragmentActivity implements IAv<H, D>, OnClickListener {
-	protected D data;
-	protected H holder;
+	protected D _data;
+	protected H _holder;
+
+	public final D getData() {
+		return _data;
+	}
+
+	public final H getHolder() {
+		return _holder;
+	}
 
 	public final void dataBindAll() {
-		AVLib.dataBind(data, holder);
+		AVLib.dataBind(_data, _holder);
 	}
 
 	public final void dataBindTo(String fieldName) {
-		AVLib.dataBindTo(data, holder, fieldName);
+		AVLib.dataBindTo(_data, _holder, fieldName);
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		holder = newHolder();
-		data = newData();
+		_holder = newHolder();
+		_data = newData();
 		setContentView(LayoutUtils.getLayoutId(getThisClass()));
-		AvUtils.initHolder(holder, this);
-		holder.initViewParams();
+		AvUtils.initHolder(_holder, this);
+		if (_holder != null)
+			_holder.initViewParams();
 		dataBindAll();
 	}
 
@@ -50,21 +59,9 @@ public abstract class AvFragmentActivity<H extends IHolder, D extends IData>
 		return clazz;
 	}
 
-	public final D getData() {
-		return data;
-	}
-
-	public final H getHolder() {
-		return holder;
-	}
-
 	@Override
 	public void onClick(View v) {
 		if (v == null)
 			return;
-		if (holder != null) {
-			holder.onClick(v);
-			return;
-		}
 	}
 }

@@ -11,12 +11,28 @@ import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.rule.IData;
 import com.snicesoft.avlib.rule.IHolder;
 
+@SuppressWarnings("unchecked")
 public abstract class AvFragment<H extends IHolder, D extends IData, FA extends FragmentActivity>
-		extends Fragment implements IAv<H, D> {
-	protected D data;
-	protected H holder;
+		extends Fragment implements IAv<H, D>, View.OnClickListener {
+	protected D _data;
+	protected H _holder;
 
-	@SuppressWarnings("unchecked")
+	public final D getData() {
+		return _data;
+	}
+
+	public final H getHolder() {
+		return _holder;
+	}
+
+	public final void dataBindAll() {
+		AVLib.dataBind(_data, _holder);
+	}
+
+	public final void dataBindTo(String fieldName) {
+		AVLib.dataBindTo(_data, _holder, fieldName);
+	}
+
 	public final FA fa() {
 		return (FA) getActivity();
 	}
@@ -24,28 +40,13 @@ public abstract class AvFragment<H extends IHolder, D extends IData, FA extends 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		holder = newHolder();
-		data = newData();
+		_holder = newHolder();
+		_data = newData();
 		View root = inflater.inflate(LayoutUtils.getLayoutId(getClass()), null);
-		AvUtils.initHolder(holder, this);
-		holder.initViewParams();
+		AvUtils.initHolder(_holder, root);
+		if (_holder != null)
+			_holder.initViewParams();
 		dataBindAll();
 		return root;
-	}
-
-	public final void dataBindAll() {
-		AVLib.dataBind(data, holder);
-	}
-
-	public final void dataBindTo(String fieldName) {
-		AVLib.dataBindTo(data, holder, fieldName);
-	}
-
-	public final D getData() {
-		return data;
-	}
-
-	public final H getHolder() {
-		return holder;
 	}
 }

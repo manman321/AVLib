@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.annotation.DataBind;
 import com.snicesoft.avlib.annotation.Id;
 import com.snicesoft.avlib.demo.R;

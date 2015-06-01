@@ -1,7 +1,7 @@
 package com.snicesoft.avlib.base;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
+import android.view.View;
 
 import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.rule.IHolder;
@@ -15,11 +15,9 @@ class AvUtils {
 			AVLib.initHolder(av);
 	}
 
-	public static <H extends IHolder> void initHolder(H holder, Fragment f) {
+	public static <H extends IHolder> void initHolder(H holder, View f) {
 		if (holder != null)
 			AVLib.initHolder(holder, f);
-		else
-			AVLib.initHolder(f);
 	}
 
 }

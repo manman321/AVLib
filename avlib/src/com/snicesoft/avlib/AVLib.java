@@ -82,6 +82,32 @@ public class AVLib {
 		dataBindAll(data, holder);
 	}
 
+	public static <D extends IData> void dataBind(View v, D data) {
+		Class<?> clazz = data.getClass();
+		Field[] dataFields = clazz.getDeclaredFields();
+		if (dataFields != null && dataFields.length > 0) {
+			for (Field field : dataFields) {
+				if (field.getAnnotation(DataBind.class) == null)
+					continue;
+				try {
+					field.setAccessible(true);
+					Object value = field.get(data);
+					if (value == null)
+						continue;
+					DataBind dataBind = field.getAnnotation(DataBind.class);
+					if (dataBind != null) {
+						int vid = dataBind.id();
+						View view = v.findViewById(vid);
+						if (view != null)
+							setValue(view, new ViewValue(value, dataBind));
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 	private static void dataBind(Object data, Object holder, Class<?> clazz) {
 		Field[] dataFields = clazz.getDeclaredFields();
 		if (dataFields != null && dataFields.length > 0) {
