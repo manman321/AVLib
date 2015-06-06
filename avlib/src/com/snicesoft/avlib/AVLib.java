@@ -324,7 +324,7 @@ public class AVLib {
 	}
 
 	private static boolean isNotObject(Class<?> clazz) {
-		return clazz.getSuperclass() != Object.class;
+		return clazz.getSuperclass() != IData.class;
 	}
 
 	public static void setLoadImg(LoadImg loadImg) {
