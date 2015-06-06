@@ -17,20 +17,29 @@ public abstract class AvFragment<H extends IHolder, D extends IData, FA extends 
 	protected D _data;
 	protected H _holder;
 
+	@Override
 	public final D getData() {
 		return _data;
 	}
 
+	@Override
 	public final H getHolder() {
 		return _holder;
 	}
 
+	@Override
 	public final void dataBindAll() {
 		AVLib.dataBind(_data, _holder);
 	}
 
+	@Override
 	public final void dataBindTo(String fieldName) {
 		AVLib.dataBindTo(_data, _holder, fieldName);
+	}
+
+	@Override
+	public void dataBindTo(String fieldName, View view) {
+		AVLib.dataBindTo(_data, view, fieldName);
 	}
 
 	public final FA fa() {

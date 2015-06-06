@@ -27,8 +27,11 @@ import com.snicesoft.avlib.view.ViewFinder;
  * @since 2015年4月15日 上午9:50:38
  * @version V1.0
  */
-@SuppressLint("SimpleDateFormat")
+@SuppressLint({ "SimpleDateFormat", "UseSparseArrays" })
 public class AVLib {
+
+	// private static HashMap<IHolder, HashMap<Integer, View>> holderMap = new
+	// HashMap<IHolder, HashMap<Integer, View>>();
 
 	public interface LoadImg {
 		void loadImg(View v, int loadingResId, int failResId, String url);
@@ -57,7 +60,7 @@ public class AVLib {
 
 	private static LoadImg loadImg;
 
-	private static void bindValue(Object data, Object holder, Field field)
+	private static void bindValue(IData data, IHolder holder, Field field)
 			throws IllegalAccessException {
 		Object value = field.get(data);
 		if (value == null)
@@ -66,6 +69,18 @@ public class AVLib {
 		if (dataBind != null) {
 			int vid = dataBind.id();
 			View view = getView(holder, vid);
+			if (view != null)
+				setValue(view, new ViewValue(value, dataBind));
+		}
+	}
+
+	private static void bindValue(Field field, IData data, View view)
+			throws IllegalArgumentException, IllegalAccessException {
+		Object value = field.get(data);
+		if (value == null)
+			return;
+		DataBind dataBind = field.getAnnotation(DataBind.class);
+		if (dataBind != null) {
 			if (view != null)
 				setValue(view, new ViewValue(value, dataBind));
 		}
@@ -82,7 +97,7 @@ public class AVLib {
 		dataBindAll(data, holder);
 	}
 
-	public static <D extends IData> void dataBind(View v, D data) {
+	public static <D extends IData> void dataBind(D data, View parentView) {
 		Class<?> clazz = data.getClass();
 		Field[] dataFields = clazz.getDeclaredFields();
 		if (dataFields != null && dataFields.length > 0) {
@@ -97,7 +112,7 @@ public class AVLib {
 					DataBind dataBind = field.getAnnotation(DataBind.class);
 					if (dataBind != null) {
 						int vid = dataBind.id();
-						View view = v.findViewById(vid);
+						View view = parentView.findViewById(vid);
 						if (view != null)
 							setValue(view, new ViewValue(value, dataBind));
 					}
@@ -108,7 +123,7 @@ public class AVLib {
 		}
 	}
 
-	private static void dataBind(Object data, Object holder, Class<?> clazz) {
+	private static void dataBind(IData data, IHolder holder, Class<?> clazz) {
 		Field[] dataFields = clazz.getDeclaredFields();
 		if (dataFields != null && dataFields.length > 0) {
 			for (Field field : dataFields) {
@@ -130,7 +145,7 @@ public class AVLib {
 	 * @param data
 	 * @param holder
 	 */
-	private static void dataBindAll(Object data, Object holder) {
+	private static void dataBindAll(IData data, IHolder holder) {
 		if (data == null || holder == null)
 			return;
 		try {
@@ -142,6 +157,30 @@ public class AVLib {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public static <D extends IData> void dataBindTo(D data, View view,
+			String fieldName) {
+		if (data == null || view == null || TextUtils.isEmpty(fieldName))
+			return;
+		try {
+			Class<?> clazz = data.getClass();
+			Field field = clazz.getDeclaredField(fieldName);
+			field.setAccessible(true);
+			bindValue(field, data, view);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (isNotObject(data.getClass())) {
+			try {
+				Class<?> clazz = data.getClass().getSuperclass();
+				Field field = clazz.getDeclaredField(fieldName);
+				field.setAccessible(true);
+				bindValue(field, data, view);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -176,8 +215,14 @@ public class AVLib {
 	 * @param vid
 	 * @return
 	 */
-	private static View getView(Object holder, int vid) {
+	private static View getView(IHolder holder, int vid) {
 		View v = null;
+		// try {
+		// v = holderMap.get(holder).get(vid);
+		// } catch (Exception e) {
+		// }
+		// if (v != null)
+		// return v;
 		Class<?> clazz = holder.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
@@ -194,6 +239,7 @@ public class AVLib {
 				e.printStackTrace();
 			}
 		}
+
 		v = null;
 		if (isNotObject(clazz)) {
 			fields = clazz.getSuperclass().getDeclaredFields();
@@ -215,20 +261,6 @@ public class AVLib {
 		return v;
 	}
 
-	/**
-	 * 初始化Activity中的View
-	 * 
-	 * @param av
-	 *            Activity本身就符合Holder的规范
-	 */
-	public static void initHolder(Activity av) {
-		initHolderAll(av, new ViewFinder(av));
-	}
-
-	public static void initHolder(Fragment fragment) {
-		initHolderAll(fragment, new ViewFinder(fragment.getView()));
-	}
-
 	public static <H extends IHolder> void initHolder(H holder, Activity av) {
 		initHolderAll(holder, new ViewFinder(av));
 	}
@@ -241,7 +273,22 @@ public class AVLib {
 		initHolderAll(holder, new ViewFinder(view));
 	}
 
-	private static void initHolder(Object holder, ViewFinder finder,
+	private static void initHolderAll(IHolder holder, ViewFinder finder) {
+		if (holder == null || finder == null)
+			return;
+		try {
+			Class<?> clazz = holder.getClass();
+			initHolder(holder, finder, clazz);
+			if (isNotObject(clazz)) {
+				clazz = clazz.getSuperclass();
+				initHolder(holder, finder, clazz);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void initHolder(IHolder holder, ViewFinder finder,
 			Class<?> clazz) {
 		Field[] fields = clazz.getDeclaredFields();
 		if (fields != null && fields.length > 0)
@@ -257,6 +304,10 @@ public class AVLib {
 					int src = resource.src();
 					View v = finder.findViewById(resId);
 					if (v != null) {
+						// if (holderMap.get(holder) == null) {
+						// holderMap.put(holder, new HashMap<Integer, View>());
+						// }
+						// holderMap.get(holder).put(resId, v);
 						if (backgroundColor != 0)
 							v.setBackgroundColor(backgroundColor);
 						if (background != 0)
@@ -270,21 +321,6 @@ public class AVLib {
 					e.printStackTrace();
 				}
 			}
-	}
-
-	private static void initHolderAll(Object holder, ViewFinder finder) {
-		if (holder == null || finder == null)
-			return;
-		try {
-			Class<?> clazz = holder.getClass();
-			initHolder(holder, finder, clazz);
-			if (isNotObject(clazz)) {
-				clazz = clazz.getSuperclass();
-				initHolder(holder, finder, clazz);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	private static boolean isNotObject(Class<?> clazz) {

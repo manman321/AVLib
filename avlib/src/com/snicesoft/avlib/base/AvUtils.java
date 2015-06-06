@@ -11,8 +11,6 @@ class AvUtils {
 	public static <H extends IHolder> void initHolder(H holder, Activity av) {
 		if (holder != null)
 			AVLib.initHolder(holder, av);
-		else
-			AVLib.initHolder(av);
 	}
 
 	public static <H extends IHolder> void initHolder(H holder, View f) {
