@@ -9,6 +9,7 @@ import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.pluginmgr.Proxy;
 import com.snicesoft.avlib.rule.IData;
 import com.snicesoft.avlib.rule.IHolder;
+import com.snicesoft.avlib.view.ViewFinder;
 
 /**
  * FragmentActivity基类
@@ -20,6 +21,7 @@ import com.snicesoft.avlib.rule.IHolder;
  */
 public abstract class AvFragmentActivity<H extends IHolder, D extends IData>
 		extends FragmentActivity implements IAv<H, D>, OnClickListener {
+	private ViewFinder finder;
 	protected D _data;
 	protected H _holder;
 
@@ -35,17 +37,12 @@ public abstract class AvFragmentActivity<H extends IHolder, D extends IData>
 
 	@Override
 	public final void dataBindAll() {
-		AVLib.dataBind(_data, _holder);
+		AVLib.dataBind(_data, finder);
 	}
 
 	@Override
 	public final void dataBindTo(String fieldName) {
-		AVLib.dataBindTo(_data, _holder, fieldName);
-	}
-
-	@Override
-	public void dataBindTo(String fieldName, View view) {
-		AVLib.dataBindTo(_data, view, fieldName);
+		AVLib.dataBindTo(_data, finder, fieldName);
 	}
 
 	@Override
@@ -54,6 +51,7 @@ public abstract class AvFragmentActivity<H extends IHolder, D extends IData>
 		_holder = newHolder();
 		_data = newData();
 		setContentView(LayoutUtils.getLayoutId(getThisClass()));
+		finder = new ViewFinder(this);
 		AvUtils.initHolder(_holder, this);
 		if (_holder != null)
 			_holder.initViewParams();

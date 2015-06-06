@@ -10,10 +10,12 @@ import android.view.ViewGroup;
 import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.rule.IData;
 import com.snicesoft.avlib.rule.IHolder;
+import com.snicesoft.avlib.view.ViewFinder;
 
 @SuppressWarnings("unchecked")
 public abstract class AvFragment<H extends IHolder, D extends IData, FA extends FragmentActivity>
 		extends Fragment implements IAv<H, D>, View.OnClickListener {
+	private ViewFinder finder;
 	protected D _data;
 	protected H _holder;
 
@@ -29,17 +31,12 @@ public abstract class AvFragment<H extends IHolder, D extends IData, FA extends 
 
 	@Override
 	public final void dataBindAll() {
-		AVLib.dataBind(_data, _holder);
+		AVLib.dataBind(_data, finder);
 	}
 
 	@Override
 	public final void dataBindTo(String fieldName) {
-		AVLib.dataBindTo(_data, _holder, fieldName);
-	}
-
-	@Override
-	public void dataBindTo(String fieldName, View view) {
-		AVLib.dataBindTo(_data, view, fieldName);
+		AVLib.dataBindTo(_data, finder, fieldName);
 	}
 
 	public final FA fa() {
@@ -52,6 +49,7 @@ public abstract class AvFragment<H extends IHolder, D extends IData, FA extends 
 		_holder = newHolder();
 		_data = newData();
 		View root = inflater.inflate(LayoutUtils.getLayoutId(getClass()), null);
+		finder = new ViewFinder(root);
 		AvUtils.initHolder(_holder, root);
 		if (_holder != null)
 			_holder.initViewParams();

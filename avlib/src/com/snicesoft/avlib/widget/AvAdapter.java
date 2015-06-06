@@ -12,6 +12,7 @@ import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.annotation.Layout;
 import com.snicesoft.avlib.rule.IData;
 import com.snicesoft.avlib.rule.IHolder;
+import com.snicesoft.avlib.view.ViewFinder;
 
 /**
  * @author zhu zhe
@@ -100,7 +101,7 @@ public abstract class AvAdapter<H extends IHolder, D extends IData> extends
 		D data = getData(position);
 		if (data != null) {
 			holder.setTag(data);
-			AVLib.dataBind(data, holder);
+			AVLib.dataBind(data, new ViewFinder(convertView));
 			bindAfter(holder, data, position);
 		}
 		return convertView;

@@ -29,10 +29,6 @@ import com.snicesoft.avlib.view.ViewFinder;
  */
 @SuppressLint({ "SimpleDateFormat", "UseSparseArrays" })
 public class AVLib {
-
-	// private static HashMap<IHolder, HashMap<Integer, View>> holderMap = new
-	// HashMap<IHolder, HashMap<Integer, View>>();
-
 	public interface LoadImg {
 		void loadImg(View v, int loadingResId, int failResId, String url);
 	}
@@ -60,7 +56,7 @@ public class AVLib {
 
 	private static LoadImg loadImg;
 
-	private static void bindValue(IData data, IHolder holder, Field field)
+	private static void bindValue(IData data, ViewFinder finder, Field field)
 			throws IllegalAccessException {
 		Object value = field.get(data);
 		if (value == null)
@@ -68,19 +64,7 @@ public class AVLib {
 		DataBind dataBind = field.getAnnotation(DataBind.class);
 		if (dataBind != null) {
 			int vid = dataBind.id();
-			View view = getView(holder, vid);
-			if (view != null)
-				setValue(view, new ViewValue(value, dataBind));
-		}
-	}
-
-	private static void bindValue(Field field, IData data, View view)
-			throws IllegalArgumentException, IllegalAccessException {
-		Object value = field.get(data);
-		if (value == null)
-			return;
-		DataBind dataBind = field.getAnnotation(DataBind.class);
-		if (dataBind != null) {
+			View view = finder.findViewById(vid);
 			if (view != null)
 				setValue(view, new ViewValue(value, dataBind));
 		}
@@ -90,15 +74,13 @@ public class AVLib {
 	 * 数据绑定
 	 * 
 	 * @param data
-	 * @param holder
+	 * @param finder
 	 */
-	public static <H extends IHolder, D extends IData> void dataBind(D data,
-			H holder) {
-		dataBindAll(data, holder);
+	public static <D extends IData> void dataBind(D data, ViewFinder finder) {
+		dataBindAll(data, finder);
 	}
 
-	public static <D extends IData> void dataBind(D data, View parentView) {
-		Class<?> clazz = data.getClass();
+	private static void dataBind(IData data, ViewFinder finder, Class<?> clazz) {
 		Field[] dataFields = clazz.getDeclaredFields();
 		if (dataFields != null && dataFields.length > 0) {
 			for (Field field : dataFields) {
@@ -106,32 +88,7 @@ public class AVLib {
 					continue;
 				try {
 					field.setAccessible(true);
-					Object value = field.get(data);
-					if (value == null)
-						continue;
-					DataBind dataBind = field.getAnnotation(DataBind.class);
-					if (dataBind != null) {
-						int vid = dataBind.id();
-						View view = parentView.findViewById(vid);
-						if (view != null)
-							setValue(view, new ViewValue(value, dataBind));
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	private static void dataBind(IData data, IHolder holder, Class<?> clazz) {
-		Field[] dataFields = clazz.getDeclaredFields();
-		if (dataFields != null && dataFields.length > 0) {
-			for (Field field : dataFields) {
-				if (field.getAnnotation(DataBind.class) == null)
-					continue;
-				try {
-					field.setAccessible(true);
-					bindValue(data, holder, field);
+					bindValue(data, finder, field);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -143,32 +100,32 @@ public class AVLib {
 	 * 数据绑定到view
 	 * 
 	 * @param data
-	 * @param holder
+	 * @param finder
 	 */
-	private static void dataBindAll(IData data, IHolder holder) {
-		if (data == null || holder == null)
+	private static void dataBindAll(IData data, ViewFinder finder) {
+		if (data == null || finder == null)
 			return;
 		try {
 			Class<?> clazz = data.getClass();
-			dataBind(data, holder, clazz);
+			dataBind(data, finder, clazz);
 			if (isNotObject(clazz)) {
 				clazz = clazz.getSuperclass();
-				dataBind(data, holder, clazz);
+				dataBind(data, finder, clazz);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static <D extends IData> void dataBindTo(D data, View view,
+	public static <D extends IData> void dataBindTo(D data, ViewFinder finder,
 			String fieldName) {
-		if (data == null || view == null || TextUtils.isEmpty(fieldName))
+		if (data == null || finder == null || TextUtils.isEmpty(fieldName))
 			return;
 		try {
 			Class<?> clazz = data.getClass();
 			Field field = clazz.getDeclaredField(fieldName);
 			field.setAccessible(true);
-			bindValue(field, data, view);
+			bindValue(data, finder, field);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -177,88 +134,11 @@ public class AVLib {
 				Class<?> clazz = data.getClass().getSuperclass();
 				Field field = clazz.getDeclaredField(fieldName);
 				field.setAccessible(true);
-				bindValue(field, data, view);
+				bindValue(data, finder, field);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public static <D extends IData, H extends IHolder> void dataBindTo(D data,
-			H holder, String fieldName) {
-		if (data == null || holder == null || TextUtils.isEmpty(fieldName))
-			return;
-		try {
-			Class<?> clazz = data.getClass();
-			Field field = clazz.getDeclaredField(fieldName);
-			field.setAccessible(true);
-			bindValue(data, holder, field);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if (isNotObject(data.getClass())) {
-			try {
-				Class<?> clazz = data.getClass().getSuperclass();
-				Field field = clazz.getDeclaredField(fieldName);
-				field.setAccessible(true);
-				bindValue(data, holder, field);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	/**
-	 * 通过Id查找Holder的view
-	 * 
-	 * @param holder
-	 * @param vid
-	 * @return
-	 */
-	private static View getView(IHolder holder, int vid) {
-		View v = null;
-		// try {
-		// v = holderMap.get(holder).get(vid);
-		// } catch (Exception e) {
-		// }
-		// if (v != null)
-		// return v;
-		Class<?> clazz = holder.getClass();
-		Field[] fields = clazz.getDeclaredFields();
-		for (Field field : fields) {
-			if (field.getAnnotation(Id.class) == null)
-				continue;
-			try {
-				field.setAccessible(true);
-				v = (View) field.get(holder);
-				Id resource = field.getAnnotation(Id.class);
-				if (resource != null && resource.value() == vid) {
-					return v;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		v = null;
-		if (isNotObject(clazz)) {
-			fields = clazz.getSuperclass().getDeclaredFields();
-			for (Field field : fields) {
-				if (field.getAnnotation(Id.class) == null)
-					continue;
-				try {
-					field.setAccessible(true);
-					v = (View) field.get(holder);
-					Id resource = field.getAnnotation(Id.class);
-					if (resource != null && resource.value() == vid) {
-						return v;
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return v;
 	}
 
 	public static <H extends IHolder> void initHolder(H holder, Activity av) {
@@ -304,10 +184,6 @@ public class AVLib {
 					int src = resource.src();
 					View v = finder.findViewById(resId);
 					if (v != null) {
-						// if (holderMap.get(holder) == null) {
-						// holderMap.put(holder, new HashMap<Integer, View>());
-						// }
-						// holderMap.get(holder).put(resId, v);
 						if (backgroundColor != 0)
 							v.setBackgroundColor(backgroundColor);
 						if (background != 0)
