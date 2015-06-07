@@ -92,7 +92,7 @@ public abstract class AvAdapter<H extends IHolder, D extends IData> extends
 		if (convertView == null) {
 			holder = newHolder();
 			convertView = View.inflate(parent.getContext(), resource, null);
-			AVLib.initHolder(holder, convertView);
+			AVLib.initHolder(holder, new ViewFinder(convertView));
 			holder.initViewParams();
 			convertView.setTag(holder);
 		} else {

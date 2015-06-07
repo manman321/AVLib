@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -56,53 +54,15 @@ public class AVLib {
 
 	private static LoadImg loadImg;
 
-	private static void bindValue(IData data, ViewFinder finder, Field field)
-			throws IllegalAccessException {
-		Object value = field.get(data);
-		if (value == null)
-			return;
-		DataBind dataBind = field.getAnnotation(DataBind.class);
-		if (dataBind != null) {
-			int vid = dataBind.id();
-			View view = finder.findViewById(vid);
-			if (view != null)
-				setValue(view, new ViewValue(value, dataBind));
-		}
-	}
-
 	/**
-	 * 数据绑定
+	 * 数据绑定到view
+	 * 
+	 * @param <D>
 	 * 
 	 * @param data
 	 * @param finder
 	 */
 	public static <D extends IData> void dataBind(D data, ViewFinder finder) {
-		dataBindAll(data, finder);
-	}
-
-	private static void dataBind(IData data, ViewFinder finder, Class<?> clazz) {
-		Field[] dataFields = clazz.getDeclaredFields();
-		if (dataFields != null && dataFields.length > 0) {
-			for (Field field : dataFields) {
-				if (field.getAnnotation(DataBind.class) == null)
-					continue;
-				try {
-					field.setAccessible(true);
-					bindValue(data, finder, field);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	/**
-	 * 数据绑定到view
-	 * 
-	 * @param data
-	 * @param finder
-	 */
-	private static void dataBindAll(IData data, ViewFinder finder) {
 		if (data == null || finder == null)
 			return;
 		try {
@@ -141,19 +101,38 @@ public class AVLib {
 		}
 	}
 
-	public static <H extends IHolder> void initHolder(H holder, Activity av) {
-		initHolderAll(holder, new ViewFinder(av));
+	private static void dataBind(IData data, ViewFinder finder, Class<?> clazz) {
+		Field[] dataFields = clazz.getDeclaredFields();
+		if (dataFields != null && dataFields.length > 0) {
+			for (Field field : dataFields) {
+				if (field.getAnnotation(DataBind.class) == null)
+					continue;
+				try {
+					field.setAccessible(true);
+					bindValue(data, finder, field);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
-	public static <H extends IHolder> void initHolder(H holder, Fragment fa) {
-		initHolderAll(holder, new ViewFinder(fa.getView()));
+	private static void bindValue(IData data, ViewFinder finder, Field field)
+			throws IllegalAccessException {
+		Object value = field.get(data);
+		if (value == null)
+			return;
+		DataBind dataBind = field.getAnnotation(DataBind.class);
+		if (dataBind != null) {
+			int vid = dataBind.id();
+			View view = finder.findViewById(vid);
+			if (view != null)
+				setValue(view, new ViewValue(value, dataBind));
+		}
 	}
 
-	public static <H extends IHolder> void initHolder(H holder, View view) {
-		initHolderAll(holder, new ViewFinder(view));
-	}
-
-	private static void initHolderAll(IHolder holder, ViewFinder finder) {
+	public static <H extends IHolder> void initHolder(H holder,
+			ViewFinder finder) {
 		if (holder == null || finder == null)
 			return;
 		try {

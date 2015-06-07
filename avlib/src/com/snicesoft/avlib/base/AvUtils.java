@@ -5,17 +5,18 @@ import android.view.View;
 
 import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.rule.IHolder;
+import com.snicesoft.avlib.view.ViewFinder;
 
 class AvUtils {
 
-	public static <H extends IHolder> void initHolder(H holder, Activity av) {
-		if (holder != null)
-			AVLib.initHolder(holder, av);
+	static <H extends IHolder> void initHolder(H holder, Activity av) {
+		if (holder != null && av != null)
+			AVLib.initHolder(holder, new ViewFinder(av));
 	}
 
-	public static <H extends IHolder> void initHolder(H holder, View f) {
-		if (holder != null)
-			AVLib.initHolder(holder, f);
+	static <H extends IHolder> void initHolder(H holder, View f) {
+		if (holder != null && f != null)
+			AVLib.initHolder(holder, new ViewFinder(f));
 	}
 
 }
