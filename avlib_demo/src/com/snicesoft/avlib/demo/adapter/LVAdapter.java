@@ -18,6 +18,10 @@ import com.snicesoft.avlib.widget.AvAdapter;
 
 @Layout(R.layout.item_lv)
 public class LVAdapter extends AvAdapter<LVHolder, LVData> {
+	public LVAdapter(Context context) {
+		super(context);
+	}
+
 	public class LVHolder extends IHolder implements View.OnClickListener {
 		@Id(R.id.tvItemValue)
 		private TextView tvItemValue;
@@ -48,10 +52,6 @@ public class LVAdapter extends AvAdapter<LVHolder, LVData> {
 		@DataBind(id = R.id.tvItemValue, prefix = "From LVData ", suffix = "..")
 		public String value = "";
 
-	}
-
-	public LVAdapter(Context context) {
-		super(context);
 	}
 
 	@Override
