@@ -5,28 +5,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.snicesoft.avlib.AVLib;
-import com.snicesoft.avlib.annotation.Layout;
 import com.snicesoft.avlib.rule.IData;
 import com.snicesoft.avlib.rule.IHolder;
 import com.snicesoft.avlib.view.ViewFinder;
 
-/**
- * @author zhu zhe
- * @since 2015年4月15日 上午9:52:57
- * @version V1.0
- */
-public abstract class AvAdapter<H extends IHolder, D extends IData> extends
+public abstract class MultViewAdapter<H extends IHolder, D extends IData> extends
 		BaseAdapter<H, D> {
-
-	private int resource;
-
-	public AvAdapter(Context context) {
+	public MultViewAdapter(Context context) {
 		super(context);
-		Layout layout = getClass().getAnnotation(Layout.class);
-		if (layout != null && layout.value() != 0) {
-			this.resource = layout.value();
-		}
 	}
+
+	public abstract int getItemLayoutId(int position);
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -34,7 +23,8 @@ public abstract class AvAdapter<H extends IHolder, D extends IData> extends
 		H holder = null;
 		if (convertView == null) {
 			holder = newHolder();
-			convertView = View.inflate(parent.getContext(), resource, null);
+			convertView = View.inflate(parent.getContext(),
+					getItemLayoutId(position), null);
 			if (holder != null) {
 				AVLib.initHolder(holder, new ViewFinder(convertView));
 				holder.initViewParams();
@@ -55,5 +45,4 @@ public abstract class AvAdapter<H extends IHolder, D extends IData> extends
 		}
 		return convertView;
 	}
-
 }
