@@ -71,7 +71,9 @@ public abstract class BaseAdapter<H extends IHolder, D extends IData> extends
 	 * 
 	 * @return
 	 */
-	public abstract H newHolder();
+	public H newHolder() {
+		return null;
+	}
 
 	public void remove(int location) {
 		this.dataList.remove(location);
