@@ -92,17 +92,23 @@ public abstract class AvAdapter<H extends IHolder, D extends IData> extends
 		if (convertView == null) {
 			holder = newHolder();
 			convertView = View.inflate(parent.getContext(), resource, null);
-			AVLib.initHolder(holder, new ViewFinder(convertView));
-			holder.initViewParams();
-			convertView.setTag(holder);
+			if (holder != null) {
+				AVLib.initHolder(holder, new ViewFinder(convertView));
+				holder.initViewParams();
+				convertView.setTag(holder);
+			}
 		} else {
 			holder = (H) convertView.getTag();
 		}
 		D data = getData(position);
 		if (data != null) {
-			holder.setTag(data);
+			if (holder != null)
+				holder.setTag(data);
 			AVLib.dataBind(data, new ViewFinder(convertView));
-			bindAfter(holder, data, position);
+			if (holder == null)
+				bindAfter(position, convertView, data);
+			else
+				bindAfter(position, convertView, holder, data);
 		}
 		return convertView;
 	}
@@ -114,7 +120,11 @@ public abstract class AvAdapter<H extends IHolder, D extends IData> extends
 	 * @param data
 	 * @param position
 	 */
-	public void bindAfter(H holder, D data, int position) {
+	public void bindAfter(int position, View view, H holder, D data) {
+	}
+
+	public void bindAfter(int position, View view, D data) {
+
 	}
 
 	/**
