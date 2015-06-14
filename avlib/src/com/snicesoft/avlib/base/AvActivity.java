@@ -18,8 +18,8 @@ import com.snicesoft.avlib.view.ViewFinder;
  * @param <H>
  * @param <D>
  */
-public abstract class AvActivity<H extends IHolder, D extends IData> extends
-		Activity implements IAv<H, D>, OnClickListener {
+public class AvActivity<H extends IHolder, D extends IData> extends Activity
+		implements IAv<H, D>, OnClickListener {
 	private ViewFinder finder;
 	protected D _data;
 	protected H _holder;
@@ -63,6 +63,16 @@ public abstract class AvActivity<H extends IHolder, D extends IData> extends
 			clazz = getClass().getSuperclass();
 		}
 		return clazz;
+	}
+
+	@Override
+	public D newData() {
+		return null;
+	}
+
+	@Override
+	public H newHolder() {
+		return null;
 	}
 
 	@Override

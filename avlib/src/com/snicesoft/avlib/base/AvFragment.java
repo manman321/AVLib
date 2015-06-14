@@ -13,7 +13,7 @@ import com.snicesoft.avlib.rule.IHolder;
 import com.snicesoft.avlib.view.ViewFinder;
 
 @SuppressWarnings("unchecked")
-public abstract class AvFragment<H extends IHolder, D extends IData, FA extends FragmentActivity>
+public class AvFragment<H extends IHolder, D extends IData, FA extends FragmentActivity>
 		extends Fragment implements IAv<H, D>, View.OnClickListener {
 	private ViewFinder finder;
 	protected D _data;
@@ -50,10 +50,26 @@ public abstract class AvFragment<H extends IHolder, D extends IData, FA extends 
 		_data = newData();
 		View root = inflater.inflate(LayoutUtils.getLayoutId(getClass()), null);
 		finder = new ViewFinder(root);
-		AvUtils.initHolder(_holder, root);
-		if (_holder != null)
+		if (_holder != null) {
+			AvUtils.initHolder(_holder, root);
 			_holder.initViewParams();
+		}
 		dataBindAll();
 		return root;
+	}
+
+	@Override
+	public D newData() {
+		return null;
+	}
+
+	@Override
+	public H newHolder() {
+		return null;
+	}
+
+	@Override
+	public void onClick(View view) {
+		
 	}
 }

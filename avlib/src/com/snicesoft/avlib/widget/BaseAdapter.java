@@ -20,13 +20,28 @@ public abstract class BaseAdapter<H extends IHolder, D extends IData> extends
 		this.context = context;
 	}
 
-	public void add(D d) {
+	public final void add(D d) {
 		this.dataList.add(d);
 		notifyDataSetChanged();
 	}
 
-	public void addAll(Collection<D> collection) {
+	public final void add(int position, D d) {
+		this.dataList.add(position, d);
+		notifyDataSetChanged();
+	}
+
+	public final void addAll(Collection<D> collection) {
 		this.dataList.addAll(collection);
+		notifyDataSetChanged();
+	}
+
+	public final void addAll(int position, Collection<D> collection) {
+		this.dataList.addAll(position, collection);
+		notifyDataSetChanged();
+	}
+
+	public final void clear() {
+		this.dataList.clear();
 		notifyDataSetChanged();
 	}
 
@@ -35,11 +50,6 @@ public abstract class BaseAdapter<H extends IHolder, D extends IData> extends
 	}
 
 	public void bindAfter(int position, View view, H holder, D data) {
-	}
-
-	public void clearData() {
-		this.dataList.clear();
-		notifyDataSetChanged();
 	}
 
 	public Context getContext() {
