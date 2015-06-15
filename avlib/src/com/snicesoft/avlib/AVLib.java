@@ -223,14 +223,14 @@ public class AVLib {
 			}
 			break;
 		case ADAPTER:
-			if (value instanceof Adapter && view instanceof AdapterView) {
-				((AdapterView<Adapter>) view).setAdapter((Adapter) value);
-			}
-			if ("android.support.v4.view.PagerAdapter".equals(value.getClass()
-					.getName())
-					&& "android.support.v4.view.ViewPager".equals(view
-							.getClass().getName())) {
-				((ViewPager) view).setAdapter((PagerAdapter) value);
+			try {
+				if (value instanceof Adapter && view instanceof AdapterView) {
+					((AdapterView<Adapter>) view).setAdapter((Adapter) value);
+				}
+				if (value instanceof PagerAdapter && view instanceof ViewPager) {
+					((ViewPager) view).setAdapter((PagerAdapter) value);
+				}
+			} catch (Exception e) {
 			}
 			break;
 		case NULL:
