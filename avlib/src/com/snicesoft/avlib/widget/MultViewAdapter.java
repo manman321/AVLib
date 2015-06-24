@@ -9,13 +9,15 @@ import com.snicesoft.avlib.rule.IData;
 import com.snicesoft.avlib.rule.IHolder;
 import com.snicesoft.avlib.view.ViewFinder;
 
-public abstract class MultViewAdapter<H extends IHolder, D extends IData> extends
-		BaseAdapter<H, D> {
+public abstract class MultViewAdapter<H extends IHolder, D extends IData>
+		extends BaseAdapter<H, D> {
 	public MultViewAdapter(Context context) {
 		super(context);
 	}
 
-	public abstract int getItemLayoutId(int position);
+	public abstract int getItemViewType(int position);
+
+	public abstract int getViewTypeCount();
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -24,7 +26,7 @@ public abstract class MultViewAdapter<H extends IHolder, D extends IData> extend
 		if (convertView == null) {
 			holder = newHolder();
 			convertView = View.inflate(parent.getContext(),
-					getItemLayoutId(position), null);
+					getItemViewType(position), null);
 			if (holder != null) {
 				AVLib.initHolder(holder, new ViewFinder(convertView));
 				holder.initViewParams();
