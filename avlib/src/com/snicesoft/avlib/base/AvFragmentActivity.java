@@ -48,13 +48,11 @@ public class AvFragmentActivity<H extends IHolder, D extends IData> extends
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(LayoutUtils.getLayoutId(getThisClass()));
 		_holder = newHolder();
 		_data = newData();
-		setContentView(LayoutUtils.getLayoutId(getThisClass()));
 		finder = new ViewFinder(this);
 		AvUtils.initHolder(_holder, this);
-		if (_holder != null)
-			_holder.initViewParams();
 		dataBindAll();
 	}
 

@@ -46,14 +46,11 @@ public class AvFragment<H extends IHolder, D extends IData, FA extends FragmentA
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		View root = inflater.inflate(LayoutUtils.getLayoutId(getClass()), null);
 		_holder = newHolder();
 		_data = newData();
-		View root = inflater.inflate(LayoutUtils.getLayoutId(getClass()), null);
 		finder = new ViewFinder(root);
-		if (_holder != null) {
-			AvUtils.initHolder(_holder, root);
-			_holder.initViewParams();
-		}
+		AvUtils.initHolder(_holder, root);
 		dataBindAll();
 		return root;
 	}
@@ -70,6 +67,6 @@ public class AvFragment<H extends IHolder, D extends IData, FA extends FragmentA
 
 	@Override
 	public void onClick(View view) {
-		
+
 	}
 }
