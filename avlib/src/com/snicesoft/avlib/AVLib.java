@@ -152,7 +152,7 @@ public class AVLib {
 	private static void initHolder(IHolder holder, ViewFinder finder,
 			Class<?> clazz) {
 		Field[] fields = clazz.getDeclaredFields();
-		if (fields != null && fields.length > 0) {
+		if (fields != null && fields.length > 0)
 			for (Field field : fields) {
 				try {
 					field.setAccessible(true);
@@ -178,9 +178,6 @@ public class AVLib {
 					e.printStackTrace();
 				}
 			}
-			if (holder != null)
-				holder.initViewParams();
-		}
 	}
 
 	private static boolean isNotObject(Class<?> clazz) {
