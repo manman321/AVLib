@@ -52,6 +52,7 @@ public class AvActivity<H extends IHolder, D extends IData> extends Activity
 		_data = newData();
 		finder = new ViewFinder(this);
 		AVLib.initHolder(_holder, finder);
+		dataBindAll();
 	}
 
 	public Class<?> getThisClass() {
