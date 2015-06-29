@@ -52,8 +52,7 @@ public class AvFragmentActivity<H extends IHolder, D extends IData> extends
 		_holder = newHolder();
 		_data = newData();
 		finder = new ViewFinder(this);
-		AvUtils.initHolder(_holder, this);
-		dataBindAll();
+		AVLib.initHolder(_holder, finder);
 	}
 
 	public Class<?> getThisClass() {
