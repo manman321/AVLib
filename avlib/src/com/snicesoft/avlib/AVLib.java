@@ -142,6 +142,8 @@ public class AVLib {
 				clazz = clazz.getSuperclass();
 				initHolder(holder, finder, clazz);
 			}
+			if (holder != null)
+				holder.initViewParams();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

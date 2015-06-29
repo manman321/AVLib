@@ -50,8 +50,7 @@ public class AvFragment<H extends IHolder, D extends IData, FA extends FragmentA
 		_holder = newHolder();
 		_data = newData();
 		finder = new ViewFinder(root);
-		AvUtils.initHolder(_holder, root);
-		dataBindAll();
+		AVLib.initHolder(_holder, finder);
 		return root;
 	}
 

@@ -2,7 +2,7 @@ package com.snicesoft.avlib.base;
 
 import com.snicesoft.avlib.annotation.Layout;
 
-class LayoutUtils {
+public class LayoutUtils {
 	public static int getLayoutId(Class<?> clazz) {
 		int layoutId = 0;
 		Layout layout = clazz.getAnnotation(Layout.class);
