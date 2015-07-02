@@ -11,6 +11,10 @@ public enum DataType {
 	 */
 	STRING,
 	/**
+	 * 网页代码
+	 */
+	HTML,
+	/**
 	 * 图片
 	 */
 	IMG,

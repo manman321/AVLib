@@ -7,6 +7,7 @@ import java.util.Date;
 import android.annotation.SuppressLint;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Adapter;
@@ -209,6 +210,10 @@ public class AVLib {
 					tv.setText(p + value + s);
 				}
 			}
+			break;
+		case HTML:
+			TextView html = (TextView) view;
+			html.setText(Html.fromHtml(p + value + s));
 			break;
 		case IMG:
 			if (value instanceof Integer) {

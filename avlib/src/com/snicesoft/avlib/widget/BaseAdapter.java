@@ -40,6 +40,10 @@ public abstract class BaseAdapter<H extends IHolder, D extends IData> extends
 		notifyDataSetChanged();
 	}
 
+	public final List<D> getDataList() {
+		return this.dataList;
+	}
+
 	public final void clear() {
 		this.dataList.clear();
 		notifyDataSetChanged();
