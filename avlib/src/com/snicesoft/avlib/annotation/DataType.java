@@ -15,6 +15,10 @@ public enum DataType {
 	 */
 	HTML,
 	/**
+	 * isChecked
+	 */
+	CHECK,
+	/**
 	 * 图片
 	 */
 	IMG,

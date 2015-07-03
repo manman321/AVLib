@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -227,6 +228,12 @@ public class AVLib {
 				if (loadImg != null)
 					loadImg.loadImg(view, loading, fail, p + value.toString()
 							+ s);
+			}
+			break;
+		case CHECK:
+			if (value instanceof Boolean) {
+				Checkable checkable = (Checkable) view;
+				checkable.setChecked(Boolean.getBoolean(value + ""));
 			}
 			break;
 		case ADAPTER:
